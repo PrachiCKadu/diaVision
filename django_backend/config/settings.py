@@ -185,3 +185,4 @@ SIMPLE_JWT = {
 
     "UPDATE_LAST_LOGIN": False,
 }
+STATIC_ROOT = BASE_DIR / 'staticfiles'
