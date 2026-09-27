@@ -1,463 +1,389 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Case Review | Diabetic Eye Detection{% endblock %}
+{% block title %}Case Review | Dia Vision{% endblock %}
 
 {% block required_role %}DOCTOR{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/doctor.css' %}">
+{% endblock %}
+
 {% block content %}
 
-<div class="dashboard-page">
+<div class="app-shell">
 
-    <div class="dashboard-header">
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <img src="{% static 'img/Dia.png' %}" alt="Dia Vision Logo">
+      </div>
+      <div class="brand-name"><span>Dia</span> Vision</div>
+    </div>
 
-        <div>
+    <div class="menu-title">MAIN MENU</div>
+
+    <nav class="side-nav">
+      <a class="nav-item" href="/doctor/dashboard/">
+        <svg><use href="#icon-home"></use></svg><span>Dashboard</span>
+      </a>
+      <a class="nav-item" href="/patient/upload/">
+        <svg><use href="#icon-upload"></use></svg><span>Upload Images</span>
+      </a>
+      <a class="nav-item active" href="/doctor/dashboard/#cases">
+        <svg><use href="#icon-record"></use></svg><span>Patient Records</span>
+      </a>
+      <a class="nav-item" href="/doctor/dashboard/#cases">
+        <svg><use href="#icon-ai"></use></svg><span>AI Screening</span>
+      </a>
+      <a class="nav-item" href="/doctor/dashboard/#cases">
+        <svg><use href="#icon-document"></use></svg><span>Reports</span>
+      </a>
+      <a class="nav-item" href="#" data-action="appointments">
+        <svg><use href="#icon-calendar"></use></svg><span>Appointments</span>
+      </a>
+    </nav>
+
+    <div class="menu-title resources-title">RESOURCES</div>
+
+    <nav class="side-nav">
+      <a class="nav-item" href="/doctor/dashboard/#cases">
+        <svg><use href="#icon-users"></use></svg><span>Patient Management</span>
+      </a>
+      <a class="nav-item" href="#" data-action="dataset">
+        <svg><use href="#icon-layers"></use></svg><span>Dataset &amp; Training</span>
+      </a>
+      <a class="nav-item" href="#" data-action="documentation">
+        <svg><use href="#icon-book"></use></svg><span>Documentation</span>
+      </a>
+      <a class="nav-item" href="#" data-action="support">
+        <svg><use href="#icon-support"></use></svg><span>Support</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="nav-item" href="#" data-action="settings">
+        <svg><use href="#icon-settings"></use></svg><span>Clinic Settings</span>
+      </a>
+      <a class="nav-item" href="#" data-action="profile">
+        <svg><use href="#icon-user"></use></svg><span>Profile</span>
+      </a>
+
+      <div class="doctor-mini">
+        <div class="doctor-avatar">
+          {{ request.user.first_name|default:"D"|slice:":1"|upper }}
+        </div>
+        <div class="doctor-mini-info">
+          <strong>Dr. {{ request.user.first_name|default:request.user.username }}</strong>
+          <span>{{ request.user.email|default:"Doctor" }}</span>
+        </div>
+        <button class="mini-menu" aria-label="Menu">☰</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <main class="main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">
+        <svg><use href="#icon-menu"></use></svg>
+      </button>
+
+      <div class="top-search">
+        <svg><use href="#icon-search"></use></svg>
+        <input id="searchInput" type="text" placeholder="Search cases or patients...">
+        <span class="shortcut">⌘K</span>
+      </div>
+
+      <div class="top-actions">
+        <button aria-label="Help" class="icon-btn" data-action="help">
+          <svg><use href="#icon-help"></use></svg>
+        </button>
+        <button aria-label="Notifications" class="icon-btn notification-btn" data-action="notifications">
+          <svg><use href="#icon-bell"></use></svg>
+          <span class="notification-dot"></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <div class="dashboard-page">
+
+        <div class="dashboard-header">
+          <div>
             <h1>Retinal Case Review</h1>
+            <p id="case-title">Loading case...</p>
+          </div>
 
-            <p id="case-title">
-                Loading case...
-            </p>
+          <a href="/doctor/dashboard/" class="dashboard-button">
+            ← Back to Cases
+          </a>
         </div>
 
-        <a
-            href="/doctor/dashboard/"
-            class="dashboard-button"
-        >
-            ← Back to Cases
-        </a>
+        <div id="case-message" class="form-message" style="display: none;"></div>
 
-    </div>
+        <div id="case-loading" class="loading-state">
+          Loading case details...
+        </div>
 
+        <div id="case-content" style="display: none;">
 
-    <div
-        id="case-message"
-        class="form-message"
-        style="display: none;"
-    ></div>
-
-
-    <div id="case-loading" class="loading-state">
-        Loading case details...
-    </div>
-
-
-    <div
-        id="case-content"
-        style="display: none;"
-    >
-
-        <!-- Patient Information -->
-
-        <section class="dashboard-section">
-
+          <!-- Patient Information -->
+          <section class="dashboard-section">
             <h2>Patient Information</h2>
 
-            <div class="dashboard-grid">
+            <div class="info-grid">
+              <div class="info-card">
+                <h3>Patient</h3>
+                <p id="patient-username">—</p>
+              </div>
 
-                <div class="dashboard-card">
+              <div class="info-card">
+                <h3>Age</h3>
+                <p id="patient-age">—</p>
+              </div>
 
-                    <h3>Patient</h3>
+              <div class="info-card">
+                <h3>Gender</h3>
+                <p id="patient-gender">—</p>
+              </div>
 
-                    <p id="patient-username">
-                        —
-                    </p>
-
-                </div>
-
-
-                <div class="dashboard-card">
-
-                    <h3>Age</h3>
-
-                    <p id="patient-age">
-                        —
-                    </p>
-
-                </div>
-
-
-                <div class="dashboard-card">
-
-                    <h3>Gender</h3>
-
-                    <p id="patient-gender">
-                        —
-                    </p>
-
-                </div>
-
-
-                <div class="dashboard-card">
-
-                    <h3>Diabetes Duration</h3>
-
-                    <p id="diabetes-duration">
-                        —
-                    </p>
-
-                </div>
-
+              <div class="info-card">
+                <h3>Diabetes Duration</h3>
+                <p id="diabetes-duration">—</p>
+              </div>
             </div>
+          </section>
 
-        </section>
-
-
-        <!-- Retinal Image -->
-
-        <section class="dashboard-section">
-
+          <!-- Retinal Image -->
+          <section class="dashboard-section">
             <h2>Retinal Image</h2>
 
             <div class="case-image-panel">
-
-                <img
-                    id="retinal-image"
-                    src=""
-                    alt="Retinal image"
-                    class="retinal-detail-image"
-                >
-
+              <img id="retinal-image" src="" alt="Retinal image" class="retinal-detail-image">
             </div>
+          </section>
 
-        </section>
-
-
-        <!-- AI Prediction -->
-
-        <section class="dashboard-section">
-
+          <!-- AI Prediction -->
+          <section class="dashboard-section">
             <h2>AI Prediction</h2>
 
-            <div class="dashboard-grid">
+            <div class="info-grid">
+              <div class="info-card">
+                <h3>Predicted Class</h3>
+                <p id="predicted-class">—</p>
+              </div>
 
-                <div class="dashboard-card">
-
-                    <h3>Predicted Class</h3>
-
-                    <p id="predicted-class">
-                        —
-                    </p>
-
-                </div>
-
-
-                <div class="dashboard-card">
-
-                    <h3>Confidence</h3>
-
-                    <p id="prediction-confidence">
-                        —
-                    </p>
-
-                </div>
-
+              <div class="info-card">
+                <h3>Confidence</h3>
+                <p id="prediction-confidence">—</p>
+              </div>
             </div>
 
-
-            <div class="dashboard-card">
-
-                <h3>Class Probabilities</h3>
-
-                <div id="probability-list">
-                    Loading...
-                </div>
-
+            <div class="info-card">
+              <h3>Class Probabilities</h3>
+              <div id="probability-list">Loading...</div>
             </div>
+          </section>
 
-        </section>
-
-
-        <!-- Grad-CAM -->
-
-        <section class="dashboard-section">
-
+          <!-- Grad-CAM -->
+          <section class="dashboard-section">
             <h2>Explainable AI — Grad-CAM</h2>
-
-            <p>
-                Highlighted regions represent areas
-                that contributed to the AI prediction.
-            </p>
+            <p>Highlighted regions represent areas that contributed to the AI prediction.</p>
 
             <div class="case-image-panel">
+              <img id="gradcam-image" src="" alt="Grad-CAM visualization" class="retinal-detail-image">
+            </div>
+          </section>
 
-                <img
-                    id="gradcam-image"
-                    src=""
-                    alt="Grad-CAM visualization"
-                    class="retinal-detail-image"
-                >
+          <!-- Doctor Review -->
+          <section class="dashboard-section">
+            <h2>Doctor Clinical Review</h2>
 
+            <div id="doctor-review-message" class="form-message" style="display: none;"></div>
+
+            <!-- Existing Review -->
+            <div id="existing-doctor-review" style="display: none;"></div>
+
+            <div id="doctor-review-edit-container" style="display: none;">
+              <form id="doctor-review-edit-form">
+                <div class="form-group">
+                  <label for="edit-review-notes">Clinical Notes</label>
+                  <textarea
+                    id="edit-review-notes"
+                    rows="6"
+                    placeholder="Update your clinical observations..."
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="review-actions">
+                  <button type="submit" id="review-update-btn" class="auth-button">
+                    Save Changes
+                  </button>
+                  <button type="button" id="review-cancel-btn" class="dashboard-button">
+                    Cancel
+                  </button>
+                </div>
+              </form>
             </div>
 
-        </section>
-
-
-       <!-- Doctor Review -->
-
-<section class="dashboard-section">
-
-    <h2>Doctor Clinical Review</h2>
-
-    <div
-        id="doctor-review-message"
-        class="form-message"
-        style="display: none;"
-    ></div>
-
-    <!-- Existing Review -->
-
-   <div
-    id="existing-doctor-review"
-    style="display: none;"
->
-</div>
-
-<div
-    id="doctor-review-edit-container"
-    style="display: none;"
->
-    <form id="doctor-review-edit-form">
-
-        <div class="form-group">
-
-            <label for="edit-review-notes">
-                Clinical Notes
-            </label>
-
-            <textarea
-                id="edit-review-notes"
-                rows="6"
-                placeholder="Update your clinical observations..."
-                required
-            ></textarea>
-
-        </div>
-
-        <div class="review-actions">
-
-            <button
-                type="submit"
-                id="review-update-btn"
-                class="auth-button"
-            >
-                Save Changes
-            </button>
-
-            <button
-                type="button"
-                id="review-cancel-btn"
-                class="dashboard-button"
-            >
-                Cancel
-            </button>
-
-        </div>
-
-    </form>
-</div>
-
-
-    <!-- Review Form -->
-
-    <div id="doctor-review-form-container">
-
-        <form id="doctor-review-form">
-
-            <div class="form-group">
-
-                <label for="review-notes">
-                    Clinical Notes
-                </label>
-
-                <textarea
+            <!-- Review Form -->
+            <div id="doctor-review-form-container">
+              <form id="doctor-review-form">
+                <div class="form-group">
+                  <label for="review-notes">Clinical Notes</label>
+                  <textarea
                     id="review-notes"
                     name="notes"
                     rows="6"
                     placeholder="Enter your clinical observations..."
                     required
-                ></textarea>
-
-            </div>
-
-            <button
-                type="submit"
-                id="review-submit-btn"
-                class="auth-button"
-            >
-                Save Clinical Review
-            </button>
-
-        </form>
-
-    </div>
-
-</section>
-
-<!-- Medical Report -->
-
-<section class="dashboard-section">
-
-    <div class="section-header">
-
-        <div>
-    <h2>Medical Report</h2>
-
-    <p>
-        AI prediction and doctor's clinical assessment
-        combined into a medical report.
-    </p>
-</div>
-
-<div class="report-actions">
-
-    <button
-        type="button"
-        id="download-report-btn"
-        class="auth-button"
-        style="display: none;"
-    >
-        Download Medical Report (PDF)
-    </button>
-
-</div>
-
-        <span
-            id="report-status"
-            class="status-badge"
-        >
-            Loading...
-        </span>
-
-    </div>
-
-
-    <div
-        id="report-message"
-        class="form-message"
-        style="display: none;"
-    ></div>
-
-
-    <div
-        id="medical-report-container"
-        style="display: none;"
-    >
-
-        <div class="dashboard-card">
-
-            <h3 id="report-title">
-                Diabetic Retinopathy Assessment Report
-            </h3>
-
-
-            <div class="case-information">
-
-                <div class="case-info-row">
-
-                    <strong>
-                        AI Prediction
-                    </strong>
-
-                    <span id="report-ai-prediction">
-                        —
-                    </span>
-
+                  ></textarea>
                 </div>
 
+                <button type="submit" id="review-submit-btn" class="auth-button">
+                  Save Clinical Review
+                </button>
+              </form>
+            </div>
+          </section>
 
-                <div class="case-info-row">
+          <!-- Medical Report -->
+          <section class="dashboard-section">
+            <div class="section-header">
+              <div>
+                <h2>Medical Report</h2>
+                <p>AI prediction and doctor's clinical assessment combined into a medical report.</p>
+              </div>
 
-                    <strong>
-                        AI Confidence
-                    </strong>
+              <div class="report-actions">
+                <button type="button" id="download-report-btn" class="auth-button" style="display: none;">
+                  Download Medical Report (PDF)
+                </button>
+              </div>
 
-                    <span id="report-ai-confidence">
-                        —
-                    </span>
+              <span id="report-status" class="status-badge">Loading...</span>
+            </div>
 
+            <div id="report-message" class="form-message" style="display: none;"></div>
+
+            <div id="medical-report-container" style="display: none;">
+              <div class="info-card">
+                <h3 id="report-title">Diabetic Retinopathy Assessment Report</h3>
+
+                <div class="case-information">
+                  <div class="case-info-row">
+                    <strong>AI Prediction</strong>
+                    <span id="report-ai-prediction">—</span>
+                  </div>
+
+                  <div class="case-info-row">
+                    <strong>AI Confidence</strong>
+                    <span id="report-ai-confidence">—</span>
+                  </div>
+
+                  <div class="case-info-row">
+                    <strong>Generated At</strong>
+                    <span id="report-generated-at">—</span>
+                  </div>
                 </div>
 
-
-                <div class="case-info-row">
-
-                    <strong>
-                        Generated At
-                    </strong>
-
-                    <span id="report-generated-at">
-                        —
-                    </span>
-
+                <div class="review-notes">
+                  <h4>Clinical Summary</h4>
+                  <p id="report-clinical-summary">—</p>
                 </div>
 
+                <div class="review-notes">
+                  <h4>Doctor's Notes</h4>
+                  <p id="report-doctor-notes">—</p>
+                </div>
+
+                <div class="review-notes">
+                  <h4>Recommendation</h4>
+                  <p id="report-recommendation">—</p>
+                </div>
+              </div>
             </div>
 
-
-            <div class="review-notes">
-
-                <h4>
-                    Clinical Summary
-                </h4>
-
-                <p id="report-clinical-summary">
-                    —
-                </p>
-
+            <div id="report-not-available" class="empty-state" style="display: none;">
+              <h3>Medical Report Not Available</h3>
+              <p>Complete the doctor's clinical review to generate the medical report.</p>
             </div>
-
-
-            <div class="review-notes">
-
-                <h4>
-                    Doctor's Notes
-                </h4>
-
-                <p id="report-doctor-notes">
-                    —
-                </p>
-
-            </div>
-
-
-            <div class="review-notes">
-
-                <h4>
-                    Recommendation
-                </h4>
-
-                <p id="report-recommendation">
-                    —
-                </p>
-
-            </div>
+          </section>
 
         </div>
 
-    </div>
-
-
-    <div
-        id="report-not-available"
-        class="empty-state"
-        style="display: none;"
-    >
-
-        <h3>
-            Medical Report Not Available
-        </h3>
-
-        <p>
-            Complete the doctor's clinical review
-            to generate the medical report.
-        </p>
+      </div>
 
     </div>
-
-</section>
-
-    </div>
-
+  </main>
 </div>
+
+<!-- ================= SVG ICON DEFINITIONS ================= -->
+<svg xmlns="http://www.w3.org/2000/svg" class="svg-definitions">
+  <symbol id="icon-home" viewBox="0 0 24 24">
+    <path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9 21v-7h6v7"></path>
+  </symbol>
+  <symbol id="icon-upload" viewBox="0 0 24 24">
+    <path d="M12 16V4"></path><path d="m7 9 5-5 5 5"></path><path d="M4 14v5h16v-5"></path>
+  </symbol>
+  <symbol id="icon-users" viewBox="0 0 24 24">
+    <circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="9" r="2.5"></circle>
+    <path d="M3 20c0-3.5 2.5-5.5 6-5.5s6 2 6 5.5"></path><path d="M15 14.5c3 0 5 1.8 5 4.5"></path>
+  </symbol>
+  <symbol id="icon-record" viewBox="0 0 24 24">
+    <rect x="3" y="6" width="18" height="14" rx="2"></rect><path d="M8 6V4h8v2"></path>
+    <path d="M8 13h8"></path><path d="M12 10v6"></path>
+  </symbol>
+  <symbol id="icon-ai" viewBox="0 0 24 24">
+    <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"></path>
+  </symbol>
+  <symbol id="icon-document" viewBox="0 0 24 24">
+    <path d="M6 2h9l4 4v16H6z"></path><path d="M14 2v5h5"></path>
+    <path d="M9 12h6"></path><path d="M9 16h6"></path>
+  </symbol>
+  <symbol id="icon-calendar" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+    <path d="M7 3v4"></path><path d="M17 3v4"></path><path d="M3 10h18"></path>
+  </symbol>
+  <symbol id="icon-layers" viewBox="0 0 24 24">
+    <path d="m12 3 9 5-9 5-9-5 9-5Z"></path><path d="m3 12 9 5 9-5"></path><path d="m3 16 9 5 9-5"></path>
+  </symbol>
+  <symbol id="icon-book" viewBox="0 0 24 24">
+    <path d="M4 4h6c2 0 3 1 3 3v13c0-2-1-3-3-3H4z"></path>
+    <path d="M20 4h-6c-2 0-3 1-3 3v13c0-2 1-3 3-3h6z"></path>
+  </symbol>
+  <symbol id="icon-support" viewBox="0 0 24 24">
+    <path d="M4 13a8 8 0 0 1 16 0"></path>
+    <path d="M4 13v5a2 2 0 0 0 2 2h2v-7H4Z"></path>
+    <path d="M20 13v5a2 2 0 0 1-2 2h-2v-7h4Z"></path>
+    <path d="M16 20c0 1-1 2-3 2"></path>
+  </symbol>
+  <symbol id="icon-settings" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="3"></circle>
+    <path d="M19.4 15a1.8 1.8 0 0 0 .4 2l.1.1-2 2-.1-.1a1.8 1.8 0 0 0-2-.4 1.8 1.8 0 0 0-1.1 1.6V20h-3v-.2a1.8 1.8 0 0 0-1.1-1.6 1.8 1.8 0 0 0-2 .4l-.1.1-2-2 .1-.1a1.8 1.8 0 0 0 .4-2A1.8 1.8 0 0 0 5.4 13H5v-3h.4a1.8 1.8 0 0 0 1.6-1.1 1.8 1.8 0 0 0-.4-2l-.1-.1 2-2 .1.1a1.8 1.8 0 0 0 2 .4A1.8 1.8 0 0 0 11.7 3H12"></path>
+  </symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24">
+    <circle cx="12" cy="8" r="3.5"></circle><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5"></path>
+  </symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24">
+    <circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path>
+  </symbol>
+  <symbol id="icon-bell" viewBox="0 0 24 24">
+    <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path>
+  </symbol>
+  <symbol id="icon-help" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9"></circle><path d="M9.5 9a2.6 2.6 0 1 1 4.5 1.8c-1.2 1-2 1.4-2 3"></path><circle cx="12" cy="17" r=".7"></circle>
+  </symbol>
+  <symbol id="icon-menu" viewBox="0 0 24 24">
+    <path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path>
+  </symbol>
+</svg>
 
 {% endblock %}
 
@@ -465,10 +391,45 @@
 {% block extra_js %}
 
 <script>
-    window.DOCTOR_CASE_ID =
-        "{{ retinal_image_id }}";
+    window.DOCTOR_CASE_ID = "{{ retinal_image_id }}";
 </script>
 
 <script src="{% static 'js/doctor-case-detail.js' %}"></script>
+
+{% if request.resolver_match.url_name != 'doctor_dashboard' %}
+<script>
+    // Reuse the same sidebar / mobile-menu chrome behavior as the dashboard page.
+    document.addEventListener("DOMContentLoaded", () => {
+        const mobileMenu = document.getElementById("mobileMenu");
+        const sidebar = document.querySelector(".sidebar");
+
+        if (mobileMenu && sidebar) {
+            mobileMenu.addEventListener("click", (event) => {
+                event.stopPropagation();
+                sidebar.classList.toggle("open");
+            });
+
+            document.addEventListener("click", (event) => {
+                if (window.innerWidth <= 1050 && sidebar.classList.contains("open")) {
+                    if (!sidebar.contains(event.target) && !mobileMenu.contains(event.target)) {
+                        sidebar.classList.remove("open");
+                    }
+                }
+            });
+        }
+
+        document.addEventListener("keydown", (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+                event.preventDefault();
+                const searchInput = document.getElementById("searchInput");
+                if (searchInput) {
+                    searchInput.focus();
+                    searchInput.select();
+                }
+            }
+        });
+    });
+</script>
+{% endif %}
 
 {% endblock %}

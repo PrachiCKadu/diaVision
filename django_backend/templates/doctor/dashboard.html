@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Doctor Dashboard | Diabetic Eye Detection{% endblock %}
+{% block title %}Dia Vision — Doctor Dashboard{% endblock %}
 
 {% block required_role %}DOCTOR{% endblock %}
 
@@ -11,283 +11,461 @@
 
 {% block content %}
 
-<div class="dashboard-page">
+<div class="app-shell">
 
-    <div class="dashboard-header">
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <img src="{% static 'img/Dia.png' %}" alt="Dia Vision Logo">
+      </div>
+      <div class="brand-name"><span>Dia</span> Vision</div>
+    </div>
+
+    <div class="menu-title">MAIN MENU</div>
+
+    <nav class="side-nav">
+      <a class="nav-item active" href="/doctor/dashboard/">
+        <svg><use href="#icon-home"></use></svg><span>Dashboard</span>
+      </a>
+      <a class="nav-item" href="/patient/upload/">
+        <svg><use href="#icon-upload"></use></svg><span>Upload Images</span>
+      </a>
+      <a class="nav-item" href="#cases">
+        <svg><use href="#icon-record"></use></svg><span>Patient Records</span>
+      </a>
+      <a class="nav-item" href="#cases">
+        <svg><use href="#icon-ai"></use></svg><span>AI Screening</span>
+      </a>
+      <a class="nav-item" href="#cases">
+        <svg><use href="#icon-document"></use></svg><span>Reports</span>
+      </a>
+      <a class="nav-item" href="#" data-action="appointments">
+        <svg><use href="#icon-calendar"></use></svg><span>Appointments</span>
+      </a>
+    </nav>
+
+    <div class="menu-title resources-title">RESOURCES</div>
+
+    <nav class="side-nav">
+      <a class="nav-item" href="#cases">
+        <svg><use href="#icon-users"></use></svg><span>Patient Management</span>
+      </a>
+      <a class="nav-item" href="#" data-action="dataset">
+        <svg><use href="#icon-layers"></use></svg><span>Dataset &amp; Training</span>
+      </a>
+      <a class="nav-item" href="#" data-action="documentation">
+        <svg><use href="#icon-book"></use></svg><span>Documentation</span>
+      </a>
+      <a class="nav-item" href="#" data-action="support">
+        <svg><use href="#icon-support"></use></svg><span>Support</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="nav-item" href="#" data-action="settings">
+        <svg><use href="#icon-settings"></use></svg><span>Clinic Settings</span>
+      </a>
+      <a class="nav-item" href="#" data-action="profile">
+        <svg><use href="#icon-user"></use></svg><span>Profile</span>
+      </a>
+
+      <div class="doctor-mini">
+        <div class="doctor-avatar">
+          {{ request.user.first_name|default:"D"|slice:":1"|upper }}
+        </div>
+        <div class="doctor-mini-info">
+          <strong>Dr. {{ request.user.first_name|default:request.user.username }}</strong>
+          <span>{{ request.user.email|default:"Doctor" }}</span>
+        </div>
+        <button class="mini-menu" aria-label="Menu">☰</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <main class="main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">
+        <svg><use href="#icon-menu"></use></svg>
+      </button>
+
+      <div class="top-search">
+        <svg><use href="#icon-search"></use></svg>
+        <input id="searchInput" type="text" placeholder="Search cases or patients...">
+        <span class="shortcut">⌘K</span>
+      </div>
+
+      <div class="top-actions">
+        <button aria-label="Help" class="icon-btn" data-action="help">
+          <svg><use href="#icon-help"></use></svg>
+        </button>
+        <button aria-label="Notifications" class="icon-btn notification-btn" data-action="notifications">
+          <svg><use href="#icon-bell"></use></svg>
+          <span class="notification-dot"></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- PAGE HEADING -->
+      <div class="page-heading">
         <div>
-            <h1>Doctor Dashboard</h1>
-            <p>
-                Welcome, Dr. {{ request.user.first_name|default:request.user.username }}.
-            </p>
+          <h1>Dr. {{ request.user.first_name|default:request.user.username }}</h1>
+          <p>Review AI-assisted retinal screening cases and clinical assessments.</p>
         </div>
 
-        <span id="doctor-case-count" class="status-badge">
-            Loading...
-        </span>
-    </div>
+        <span id="overview-status" class="status-badge">Loading...</span>
+      </div>
 
+      <div class="dashboard-grid">
 
-    <!-- Overview -->
-<!-- Clinical Overview -->
+        <!-- ================= CENTER ================= -->
+        <section class="center-column">
 
-<section class="dashboard-section">
+          <!-- SUMMARY CARDS -->
+          <div class="summary-grid summary-grid-4">
 
-    <div class="section-header">
+            <article class="summary-card blue-card">
+              <div class="summary-top">
+                <div class="summary-icon blue">
+                  <svg><use href="#icon-eye"></use></svg>
+                </div>
+                <a href="#cases" class="outline-btn">Review Now</a>
+              </div>
+              <div class="summary-label">Images to Review</div>
+              <div class="summary-bottom">
+                <strong id="metric-pending-reviews">—</strong>
+              </div>
+              <div class="blob blue-blob"></div>
+            </article>
 
-        <div>
-            <h2>Clinical Overview</h2>
-            <p>
-                Monitor retinal cases, clinical reviews,
-                and AI-assisted assessments.
-            </p>
-        </div>
+            <article class="summary-card purple-card">
+              <div class="summary-top">
+                <div class="summary-icon purple">
+                  <svg><use href="#icon-users"></use></svg>
+                </div>
+                <a href="#cases" class="outline-btn">All Cases</a>
+              </div>
+              <div class="summary-label">Total Cases</div>
+              <div class="summary-bottom">
+                <strong id="metric-total-cases">—</strong>
+              </div>
+              <div class="blob purple-blob"></div>
+            </article>
 
-        <span
-            id="overview-status"
-            class="status-badge"
-        >
-            Loading...
-        </span>
+            <article class="summary-card green-card">
+              <div class="summary-top">
+                <div class="summary-icon green">
+                  <svg><use href="#icon-shield"></use></svg>
+                </div>
+                <a href="#cases" class="outline-btn">Reviewed</a>
+              </div>
+              <div class="summary-label">Reviewed Cases</div>
+              <div class="summary-bottom">
+                <strong id="metric-reviewed-cases">—</strong>
+              </div>
+              <div class="blob green-blob"></div>
+            </article>
 
-    </div>
+            <article class="summary-card orange-card">
+              <div class="summary-top">
+                <div class="summary-icon orange">
+                  <svg><use href="#icon-document"></use></svg>
+                </div>
+                <a href="#cases" class="outline-btn">Reports</a>
+              </div>
+              <div class="summary-label">Medical Reports</div>
+              <div class="summary-bottom">
+                <strong id="metric-reports">—</strong>
+              </div>
+              <div class="blob orange-blob"></div>
+            </article>
 
+          </div>
 
-    <div class="dashboard-grid overview-metrics">
-
-        <!-- Total Cases -->
-
-        <div class="dashboard-card metric-card">
-
-            <div class="metric-card-header">
-                <span class="metric-label">
-                    Total Cases
-                </span>
-
-                <span class="metric-icon">
-                    Cases
-                </span>
+          <!-- AI ASSISTANT STRIP -->
+          <section class="assistant-strip card">
+            <div class="large-icon ai-blue">
+              <svg><use href="#icon-ai"></use></svg>
             </div>
-
-            <div
-                id="metric-total-cases"
-                class="metric-value"
-            >
-                —
-            </div>
-
-            <p class="metric-description">
-                Retinal cases submitted by patients.
-            </p>
-
-        </div>
-
-
-        <!-- Pending Reviews -->
-
-        <div class="dashboard-card metric-card">
-
-            <div class="metric-card-header">
-                <span class="metric-label">
-                    Pending Reviews
-                </span>
-
-                <span class="metric-icon">
-                    Review
-                </span>
-            </div>
-
-            <div
-                id="metric-pending-reviews"
-                class="metric-value"
-            >
-                —
-            </div>
-
-            <p class="metric-description">
-                Cases awaiting clinical assessment.
-            </p>
-
-        </div>
-
-
-        <!-- Reviewed Cases -->
-
-        <div class="dashboard-card metric-card">
-
-            <div class="metric-card-header">
-                <span class="metric-label">
-                    Reviewed Cases
-                </span>
-
-                <span class="metric-icon">
-                    Done
-                </span>
-            </div>
-
-            <div
-                id="metric-reviewed-cases"
-                class="metric-value"
-            >
-                —
-            </div>
-
-            <p class="metric-description">
-                Cases with completed doctor review.
-            </p>
-
-        </div>
-
-
-        <!-- Reports -->
-
-        <div class="dashboard-card metric-card">
-
-            <div class="metric-card-header">
-                <span class="metric-label">
-                    Medical Reports
-                </span>
-
-                <span class="metric-icon">
-                    Reports
-                </span>
-            </div>
-
-            <div
-                id="metric-reports"
-                class="metric-value"
-            >
-                —
-            </div>
-
-            <p class="metric-description">
-                AI-assisted clinical reports generated.
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-    <!-- Retinal Cases -->
-
-    <section class="dashboard-section">
-
-        <div class="section-header">
-
             <div>
-                <h2>Recent Retinal Cases</h2>
+              <h2>AI Screening Assistant</h2>
+              <p>Automated detection of diabetic retinopathy from retinal images</p>
+            </div>
+            <a href="#cases" class="outline-btn ml-auto">Open Cases →</a>
+          </section>
 
-                <p>
-                    Review patient retinal images and
-                    AI-generated results.
-                </p>
+          <!-- MODEL PERFORMANCE -->
+          <section class="card model-card">
+            <div class="section-heading">
+              <div class="heading-icon">
+                <svg><use href="#icon-chart"></use></svg>
+              </div>
+              <div>
+                <h2>AI Model Performance</h2>
+                <p>Evaluated model accuracy on the current retinal classification model</p>
+              </div>
             </div>
 
-            <span id="doctor-case-status"
-                  class="status-badge">
-                Loading...
-            </span>
+            <div class="metrics-grid">
+              <div class="metric-card metric-blue">
+                <div class="metric-title">
+                  <span class="metric-icon"><svg><use href="#icon-target"></use></svg></span>
+                  Accuracy
+                </div>
+                <strong>93.2%</strong>
+              </div>
 
-        </div>
+              <div class="metric-card metric-purple">
+                <div class="metric-title">
+                  <span class="metric-icon"><svg><use href="#icon-document"></use></svg></span>
+                  Precision
+                </div>
+                <strong>91.8%</strong>
+              </div>
 
+              <div class="metric-card metric-green">
+                <div class="metric-title">
+                  <span class="metric-icon"><svg><use href="#icon-shield"></use></svg></span>
+                  Recall
+                </div>
+                <strong>92.6%</strong>
+              </div>
 
-        <div class="case-filters">
+              <div class="metric-card metric-orange">
+                <div class="metric-title">
+                  <span class="metric-icon"><svg><use href="#icon-chart"></use></svg></span>
+                  F1-Score
+                </div>
+                <strong>92.2%</strong>
+              </div>
+            </div>
 
-    <div class="filter-group">
+            <div class="model-note">
+              <span>Model information</span>
+              <p>These are the evaluated model metrics used by the project — they are static and not recalculated from today's cases.</p>
+            </div>
+          </section>
 
-        <label for="case-search">
-            Search
-        </label>
+          <!-- RETINAL CASES -->
+          <section class="card cases-card" id="cases">
 
-        <input
-            type="search"
-            id="case-search"
-            class="dashboard-input"
-            placeholder="Search by case ID or patient..."
-        >
+            <div class="section-heading">
+              <div class="heading-icon">
+                <svg><use href="#icon-record"></use></svg>
+              </div>
+              <div>
+                <h2>Retinal Cases</h2>
+                <p>Review patient retinal images and AI-generated results.</p>
+              </div>
+              <span id="doctor-case-status" class="status-badge">Loading...</span>
+            </div>
 
+            <div class="case-filters">
+              <div class="filter-group">
+                <label for="case-search">Search</label>
+                <input
+                  type="search"
+                  id="case-search"
+                  class="dashboard-input"
+                  placeholder="Search by case ID or patient..."
+                >
+              </div>
+
+              <div class="filter-group">
+                <label for="review-status-filter">Review Status</label>
+                <select id="review-status-filter" class="dashboard-input">
+                  <option value="all">All Cases</option>
+                  <option value="pending">Pending Review</option>
+                  <option value="reviewed">Reviewed</option>
+                </select>
+              </div>
+
+              <span id="doctor-case-count" class="status-badge ml-auto">Loading...</span>
+            </div>
+
+            <div id="doctor-case-message" class="form-message" style="display: none;"></div>
+
+            <div id="doctor-cases-container">
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Case ID</th>
+                      <th>Patient</th>
+                      <th>Retinal Image</th>
+                      <th>AI Diagnosis</th>
+                      <th>Confidence</th>
+                      <th>Grad-CAM</th>
+                      <th>Review Status</th>
+                      <th>Report</th>
+                      <th>Uploaded</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="doctor-cases-table-body">
+                    <tr>
+                      <td colspan="10" class="loading-state">Loading retinal cases...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </section>
+
+        </section>
+
+        <!-- ================= RIGHT COLUMN ================= -->
+        <aside class="right-column">
+
+          <!-- PENDING CASES -->
+          <section class="card follow-card">
+            <div class="follow-head">
+              <div class="follow-title">
+                <span class="heart-icon">
+                  <svg><use href="#icon-eye"></use></svg>
+                </span>
+                <div>
+                  <h2>Pending Cases</h2>
+                  <span id="pending-list-count">—</span>
+                </div>
+              </div>
+              <a href="#cases" class="outline-btn">See All</a>
+            </div>
+
+            <div class="patient-list" id="pending-cases-list">
+              <div class="pending-empty">Loading...</div>
+            </div>
+          </section>
+
+          <!-- AI DOCTOR -->
+          <section class="card ai-doctor-card">
+            <div class="ai-header">
+              <div class="robot">
+                <svg><use href="#icon-robot"></use></svg>
+              </div>
+              <h2>AI Doctor Assistant</h2>
+            </div>
+
+            <div class="ai-body">
+              <p class="ai-welcome">👋 <strong>Ask about your current caseload.</strong></p>
+              <p class="ai-question">What would you like to know?</p>
+              <p class="ai-examples">
+                Try: "How many pending?", "How many reviewed?", "Total cases?"
+              </p>
+
+              <div class="quick-actions">
+                <button type="button" data-question="How many pending cases?">Pending cases</button>
+                <button type="button" data-question="How many reviewed cases?">Reviewed cases</button>
+                <button type="button" data-question="How many reports?">Reports</button>
+              </div>
+
+              <div class="ai-input">
+                <svg><use href="#icon-mic"></use></svg>
+                <input id="aiInput" type="text" placeholder="Ask about your cases...">
+              </div>
+
+              <button class="ask-ai" id="askAi">Ask AI ✨</button>
+              <div id="aiResponse" class="ai-response"></div>
+            </div>
+          </section>
+
+        </aside>
+      </div>
     </div>
-
-
-    <div class="filter-group">
-
-        <label for="review-status-filter">
-            Review Status
-        </label>
-
-        <select
-            id="review-status-filter"
-            class="dashboard-input"
-        >
-            <option value="all">
-                All Cases
-            </option>
-
-            <option value="pending">
-                Pending Review
-            </option>
-
-            <option value="reviewed">
-                Reviewed
-            </option>
-        </select>
-
-    </div>
-
+  </main>
 </div>
 
-        <div id="doctor-case-message"
-             class="form-message"
-             style="display: none;">
-        </div>
-
-<div id="doctor-cases-container">
-
-    <div class="table-wrapper">
-
-        <table class="data-table">
-
-            <thead>
-    <tr>
-        <th>Case ID</th>
-        <th>Patient</th>
-        <th>Retinal Image</th>
-        <th>AI Diagnosis</th>
-        <th>Confidence</th>
-        <th>Grad-CAM</th>
-        <th>Review Status</th>
-        <th>Report</th>
-        <th>Uploaded</th>
-        <th>Action</th>
-    </tr>
-</thead>
-
-            <tbody id="doctor-cases-table-body">
-
-                <tr>
-                    <td colspan="10" class="loading-state">
-                        Loading retinal cases...
-                    </td>
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</div>
-
-    </section>
-
-</div>
+<!-- ================= SVG ICON DEFINITIONS ================= -->
+<svg xmlns="http://www.w3.org/2000/svg" class="svg-definitions">
+  <symbol id="icon-home" viewBox="0 0 24 24">
+    <path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9 21v-7h6v7"></path>
+  </symbol>
+  <symbol id="icon-upload" viewBox="0 0 24 24">
+    <path d="M12 16V4"></path><path d="m7 9 5-5 5 5"></path><path d="M4 14v5h16v-5"></path>
+  </symbol>
+  <symbol id="icon-users" viewBox="0 0 24 24">
+    <circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="9" r="2.5"></circle>
+    <path d="M3 20c0-3.5 2.5-5.5 6-5.5s6 2 6 5.5"></path><path d="M15 14.5c3 0 5 1.8 5 4.5"></path>
+  </symbol>
+  <symbol id="icon-record" viewBox="0 0 24 24">
+    <rect x="3" y="6" width="18" height="14" rx="2"></rect><path d="M8 6V4h8v2"></path>
+    <path d="M8 13h8"></path><path d="M12 10v6"></path>
+  </symbol>
+  <symbol id="icon-ai" viewBox="0 0 24 24">
+    <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"></path>
+  </symbol>
+  <symbol id="icon-document" viewBox="0 0 24 24">
+    <path d="M6 2h9l4 4v16H6z"></path><path d="M14 2v5h5"></path>
+    <path d="M9 12h6"></path><path d="M9 16h6"></path>
+  </symbol>
+  <symbol id="icon-calendar" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+    <path d="M7 3v4"></path><path d="M17 3v4"></path><path d="M3 10h18"></path>
+  </symbol>
+  <symbol id="icon-layers" viewBox="0 0 24 24">
+    <path d="m12 3 9 5-9 5-9-5 9-5Z"></path><path d="m3 12 9 5 9-5"></path><path d="m3 16 9 5 9-5"></path>
+  </symbol>
+  <symbol id="icon-book" viewBox="0 0 24 24">
+    <path d="M4 4h6c2 0 3 1 3 3v13c0-2-1-3-3-3H4z"></path>
+    <path d="M20 4h-6c-2 0-3 1-3 3v13c0-2 1-3 3-3h6z"></path>
+  </symbol>
+  <symbol id="icon-support" viewBox="0 0 24 24">
+    <path d="M4 13a8 8 0 0 1 16 0"></path>
+    <path d="M4 13v5a2 2 0 0 0 2 2h2v-7H4Z"></path>
+    <path d="M20 13v5a2 2 0 0 1-2 2h-2v-7h4Z"></path>
+    <path d="M16 20c0 1-1 2-3 2"></path>
+  </symbol>
+  <symbol id="icon-settings" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="3"></circle>
+    <path d="M19.4 15a1.8 1.8 0 0 0 .4 2l.1.1-2 2-.1-.1a1.8 1.8 0 0 0-2-.4 1.8 1.8 0 0 0-1.1 1.6V20h-3v-.2a1.8 1.8 0 0 0-1.1-1.6 1.8 1.8 0 0 0-2 .4l-.1.1-2-2 .1-.1a1.8 1.8 0 0 0 .4-2A1.8 1.8 0 0 0 5.4 13H5v-3h.4a1.8 1.8 0 0 0 1.6-1.1 1.8 1.8 0 0 0-.4-2l-.1-.1 2-2 .1.1a1.8 1.8 0 0 0 2 .4A1.8 1.8 0 0 0 11.7 3H12"></path>
+  </symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24">
+    <circle cx="12" cy="8" r="3.5"></circle><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5"></path>
+  </symbol>
+  <symbol id="icon-eye" viewBox="0 0 24 24">
+    <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path>
+    <circle cx="12" cy="12" r="3"></circle>
+  </symbol>
+  <symbol id="icon-chart" viewBox="0 0 24 24">
+    <path d="M5 20V11"></path><path d="M12 20V5"></path><path d="M19 20V8"></path><path d="M3 20h18"></path>
+  </symbol>
+  <symbol id="icon-target" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="4"></circle><circle cx="12" cy="12" r="1"></circle>
+  </symbol>
+  <symbol id="icon-shield" viewBox="0 0 24 24">
+    <path d="M12 3 20 6v5c0 5-3.3 8.5-8 10-4.7-1.5-8-5-8-10V6l8-3Z"></path><path d="m8 12 2.5 2.5L16 9"></path>
+  </symbol>
+  <symbol id="icon-robot" viewBox="0 0 24 24">
+    <rect x="4" y="7" width="16" height="12" rx="3"></rect><path d="M12 3v4"></path>
+    <circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M8 16h8"></path>
+  </symbol>
+  <symbol id="icon-mic" viewBox="0 0 24 24">
+    <rect x="8" y="3" width="8" height="12" rx="4"></rect><path d="M5 11a7 7 0 0 0 14 0"></path>
+    <path d="M12 18v3"></path><path d="M9 21h6"></path>
+  </symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24">
+    <circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path>
+  </symbol>
+  <symbol id="icon-bell" viewBox="0 0 24 24">
+    <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path>
+  </symbol>
+  <symbol id="icon-help" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9"></circle><path d="M9.5 9a2.6 2.6 0 1 1 4.5 1.8c-1.2 1-2 1.4-2 3"></path><circle cx="12" cy="17" r=".7"></circle>
+  </symbol>
+  <symbol id="icon-menu" viewBox="0 0 24 24">
+    <path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path>
+  </symbol>
+</svg>
 
 {% endblock %}
 
 
 {% block extra_js %}
-
 <script src="{% static 'js/doctor-dashboard.js' %}"></script>
-
 {% endblock %}
