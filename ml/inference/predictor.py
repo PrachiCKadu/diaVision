@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import tensorflow as tf
+# import tensorflow as tf
 from PIL import Image
 
 
@@ -23,6 +23,9 @@ CLASS_NAMES = [
 
 def load_model():
     """Load the trained optimized retinal CNN."""
+
+    import tensorflow as tf
+
     if not os.path.exists(MODEL_PATH):
         raise FileNotFoundError(
             f"Model not found: {MODEL_PATH}"
