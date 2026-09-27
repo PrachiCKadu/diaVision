@@ -1,0 +1,880 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Admin Dashboard | Diabetic Eye Detection{% endblock %}
+
+{% block required_role %}ADMIN{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin-dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- =========================================================
+     TOP BAR — brand + profile / logout
+========================================================= -->
+
+<header class="app-topbar">
+
+    <div class="app-topbar-inner">
+
+        <div class="app-topbar-brand">
+            <span class="app-topbar-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3.2"/></svg>
+            </span>
+            <span class="app-topbar-title">DiaVision</span>
+        </div>
+
+        <div class="dropdown app-topbar-profile">
+
+            <button
+                class="admin-profile-btn"
+                type="button"
+                id="adminProfileDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+                <span class="admin-avatar" id="admin-avatar">A</span>
+
+                <span class="admin-profile-text">
+                    <span class="admin-profile-name" id="admin-profile-name">Loading...</span>
+                    <span class="admin-profile-role">Administrator</span>
+                </span>
+
+                <svg class="admin-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end admin-dropdown-menu" aria-labelledby="adminProfileDropdown">
+
+                <li>
+                    <div class="admin-dropdown-header">
+                        <span class="admin-avatar admin-avatar-lg" id="admin-avatar-lg">A</span>
+                        <div>
+                            <div class="admin-dropdown-name" id="admin-profile-name-lg">Loading...</div>
+                            <div class="admin-dropdown-role">System Administrator</div>
+                        </div>
+                    </div>
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <li>
+                    <button class="dropdown-item admin-logout-item" id="logout-btn" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+                        Logout
+                    </button>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</header>
+
+<div class="dashboard-page">
+
+    <!-- Page Header -->
+
+    <div class="dashboard-header">
+
+        <div>
+            <h1>Admin Dashboard</h1>
+
+            <p id="admin-welcome">
+    Loading admin profile...
+</p>
+        </div>
+
+    </div>
+
+
+    <!-- System Overview -->
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>System Overview</h2>
+
+                <p>
+                    Real-time statistics from the system database.
+                </p>
+
+            </div>
+
+            <span
+                id="statistics-status"
+                class="status-badge"
+            >
+                Loading...
+            </span>
+
+        </div>
+
+
+        <div
+            id="admin-statistics-message"
+            class="form-message"
+            style="display: none;"
+        ></div>
+
+
+        <div
+            id="admin-statistics-grid"
+            class="dashboard-grid overview-metrics"
+        >
+
+            <!-- Total Users -->
+
+            <div class="dashboard-card metric-card c-users">
+
+                <div class="metric-card-header">
+
+                    <span class="metric-label">
+                        Total Users
+                    </span>
+
+                    <span class="metric-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </span>
+
+                </div>
+
+                <div
+                    id="stat-users"
+                    class="metric-value"
+                >
+                    —
+                </div>
+
+                <p class="metric-description">
+                    Registered users in the system.
+                </p>
+
+            </div>
+
+
+            <!-- Patients -->
+
+            <div class="dashboard-card metric-card c-patients">
+
+                <div class="metric-card-header">
+
+                    <span class="metric-label">
+                        Patients
+                    </span>
+
+                    <span class="metric-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    </span>
+
+                </div>
+
+                <div
+                    id="stat-patients"
+                    class="metric-value"
+                >
+                    —
+                </div>
+
+                <p class="metric-description">
+                    Registered patient accounts.
+                </p>
+
+            </div>
+
+
+            <!-- Doctors -->
+
+            <div class="dashboard-card metric-card c-doctors">
+
+                <div class="metric-card-header">
+
+                    <span class="metric-label">
+                        Doctors
+                    </span>
+
+                    <span class="metric-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 3v4M17 5h4"/><path d="M4 21v-2a4 4 0 0 1 4-4h3.5"/><circle cx="9" cy="9" r="4"/><path d="M14.5 15.5c.7 1.5 2.2 2.5 4 2.5 2.5 0 4.5-2 4.5-4.5 0-1.2-.5-2.3-1.3-3.1"/></svg>
+                    </span>
+
+                </div>
+
+                <div
+                    id="stat-doctors"
+                    class="metric-value"
+                >
+                    —
+                </div>
+
+                <p class="metric-description">
+                    Registered doctor profiles.
+                </p>
+
+            </div>
+
+
+            <!-- Pending Doctors -->
+
+            <div class="dashboard-card metric-card c-pending">
+
+                <div class="metric-card-header">
+
+                    <span class="metric-label">
+                        Pending Doctors
+                    </span>
+
+                    <span class="metric-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 3.2"/></svg>
+                    </span>
+
+                </div>
+
+                <div
+                    id="stat-pending-doctors"
+                    class="metric-value"
+                >
+                    —
+                </div>
+
+                <p class="metric-description">
+                    Doctor accounts awaiting verification.
+                </p>
+
+            </div>
+
+
+            <!-- Approved Doctors -->
+
+            <div class="dashboard-card metric-card c-approved">
+
+                <div class="metric-card-header">
+
+                    <span class="metric-label">
+                        Approved Doctors
+                    </span>
+
+                    <span class="metric-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+                    </span>
+
+                </div>
+
+                <div
+                    id="stat-approved-doctors"
+                    class="metric-value"
+                >
+                    —
+                </div>
+
+                <p class="metric-description">
+                    Verified doctors allowed to access the system.
+                </p>
+
+            </div>
+
+
+            <!-- Retinal Cases -->
+
+            <div class="dashboard-card metric-card c-cases">
+
+                <div class="metric-card-header">
+
+                    <span class="metric-label">
+                        Retinal Cases
+                    </span>
+
+                    <span class="metric-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3.2"/></svg>
+                    </span>
+
+                </div>
+
+                <div
+                    id="stat-retinal-cases"
+                    class="metric-value"
+                >
+                    —
+                </div>
+
+                <p class="metric-description">
+                    Retinal images submitted for analysis.
+                </p>
+
+            </div>
+
+
+            <!-- Predictions -->
+
+            <div class="dashboard-card metric-card c-predictions">
+
+                <div class="metric-card-header">
+
+                    <span class="metric-label">
+                        Predictions
+                    </span>
+
+                    <span class="metric-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h.01M15 9h.01M8 15c1.2 1.2 2.4 1.6 4 1.6s2.8-.4 4-1.6"/></svg>
+                    </span>
+
+                </div>
+
+                <div
+                    id="stat-predictions"
+                    class="metric-value"
+                >
+                    —
+                </div>
+
+                <p class="metric-description">
+                    AI-generated retinal predictions.
+                </p>
+
+            </div>
+
+
+            <!-- Medical Reports -->
+
+            <div class="dashboard-card metric-card c-reports">
+
+                <div class="metric-card-header">
+
+                    <span class="metric-label">
+                        Medical Reports
+                    </span>
+
+                    <span class="metric-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/></svg>
+                    </span>
+
+                </div>
+
+                <div
+                    id="stat-medical-reports"
+                    class="metric-value"
+                >
+                    —
+                </div>
+
+                <p class="metric-description">
+                    Generated medical assessment reports.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+<!-- Doctor Verification -->
+
+<section class="dashboard-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Doctor Verification</h2>
+
+            <p>
+                Review doctor registration requests and verify
+                professional credentials.
+            </p>
+        </div>
+
+        <span
+            id="pending-doctor-count"
+            class="badge text-bg-warning"
+        >
+            Loading...
+        </span>
+
+    </div>
+
+
+    <div
+        id="doctor-verification-message"
+        class="form-message"
+        style="display: none;"
+    ></div>
+
+
+    <div class="table-responsive">
+
+        <table class="table table-hover align-middle">
+
+            <thead class="table-light">
+
+                <tr>
+                    <th scope="col">Doctor</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Registration No.</th>
+                    <th scope="col">Medical Council</th>
+                    <th scope="col">Qualification</th>
+                    <th scope="col">Specialization</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" class="text-end">Action</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody id="pending-doctors-container">
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="text-center py-4 text-muted"
+                    >
+                        Loading pending doctor requests...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- User Management -->
+
+<section class="dashboard-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>User Management</h2>
+
+            <p>
+                Manage registered patients and doctors.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div
+        id="user-management-message"
+        class="form-message"
+        style="display: none;"
+    ></div>
+
+
+    <!-- Patients -->
+
+    <div class="management-subsection">
+
+        <div class="management-header">
+
+            <div>
+                <h3>Patients</h3>
+                <p class="text-muted mb-0">
+                    Registered patient accounts and retinal cases.
+                </p>
+            </div>
+
+            <span
+                id="patient-management-count"
+                class="badge text-bg-primary"
+            >
+                Loading...
+            </span>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+                        <th scope="col">Patient</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Retinal Cases</th>
+                        <th scope="col" class="text-end">Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="patients-management-container">
+
+                    <tr>
+                        <td
+                            colspan="6"
+                            class="text-center py-4 text-muted"
+                        >
+                            Loading patients...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- Doctors -->
+
+    <div class="management-subsection mt-5">
+
+        <div class="management-header">
+
+            <div>
+                <h3>Doctors</h3>
+                <p class="text-muted mb-0">
+                    Registered doctors and verification status.
+                </p>
+            </div>
+
+            <span
+                id="doctor-management-count"
+                class="badge text-bg-primary"
+            >
+                Loading...
+            </span>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+                        <th scope="col">Doctor</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Specialization</th>
+                        <th scope="col">Hospital / Clinic</th>
+                        <th scope="col">License</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="text-end">Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="doctors-management-container">
+
+                    <tr>
+                        <td
+                            colspan="7"
+                            class="text-center py-4 text-muted"
+                        >
+                            Loading doctors...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    
+
+</section>
+<!-- =========================================================
+     DOCTOR DETAILS MODAL
+========================================================= -->
+
+<div
+    class="modal fade"
+    id="doctorDetailsModal"
+    tabindex="-1"
+    aria-labelledby="doctorDetailsModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <!-- Header -->
+            <div class="modal-header">
+
+                <div>
+                    <h5
+                        class="modal-title"
+                        id="doctorDetailsModalLabel"
+                    >
+                        Doctor Details
+                    </h5>
+
+                    <small
+                        class="text-muted"
+                        id="doctor-details-subtitle"
+                    >
+                        Medical professional profile
+                    </small>
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+
+            </div>
+
+
+            <!-- Body -->
+            <div class="modal-body">
+
+                <div
+                    id="doctor-details-loading"
+                    class="text-center py-5"
+                >
+                    <div
+                        class="spinner-border"
+                        role="status"
+                    >
+                        <span class="visually-hidden">
+                            Loading...
+                        </span>
+                    </div>
+
+                    <p class="text-muted mt-3 mb-0">
+                        Loading doctor details...
+                    </p>
+                </div>
+
+
+                <div
+                    id="doctor-details-content"
+                    style="display: none;"
+                >
+
+                    <!-- Basic Information -->
+                    <div class="mb-4">
+
+                        <h6 class="fw-bold mb-3">
+                            Basic Information
+                        </h6>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <div class="small text-muted">
+                                    Doctor Name
+                                </div>
+
+                                <div
+                                    class="fw-semibold"
+                                    id="doctor-detail-name"
+                                >
+                                    —
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div class="small text-muted">
+                                    Username
+                                </div>
+
+                                <div
+                                    id="doctor-detail-username"
+                                >
+                                    —
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div class="small text-muted">
+                                    Email
+                                </div>
+
+                                <div
+                                    id="doctor-detail-email"
+                                >
+                                    —
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div class="small text-muted">
+                                    Verification Status
+                                </div>
+
+                                <div
+                                    id="doctor-detail-status"
+                                >
+                                    —
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <!-- Professional Information -->
+                    <div class="mt-4">
+
+                        <h6 class="fw-bold mb-3">
+                            Professional Information
+                        </h6>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <div class="small text-muted">
+                                    Qualification
+                                </div>
+
+                                <div
+                                    id="doctor-detail-qualification"
+                                >
+                                    —
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="small text-muted">
+                                    Specialization
+                                </div>
+
+                                <div
+                                    id="doctor-detail-specialization"
+                                >
+                                    —
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="small text-muted">
+                                    Medical Council
+                                </div>
+
+                                <div
+                                    id="doctor-detail-council"
+                                >
+                                    —
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="small text-muted">
+                                    Registration Number
+                                </div>
+
+                                <div
+                                    id="doctor-detail-registration"
+                                >
+                                    —
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="small text-muted">
+                                    Hospital / Clinic
+                                </div>
+
+                                <div
+                                    id="doctor-detail-hospital"
+                                >
+                                    —
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="small text-muted">
+                                    License Number
+                                </div>
+
+                                <div
+                                    id="doctor-detail-license"
+                                >
+                                    —
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Error -->
+                <div
+                    id="doctor-details-error"
+                    class="alert alert-danger"
+                    style="display: none;"
+                ></div>
+
+            </div>
+
+
+            <!-- Footer -->
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/admin-dashboard.js' %}"></script>
+<script src="{% static 'js/admin-dashboard-ui.js' %}"></script>
+
+{% endblock %}

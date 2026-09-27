@@ -1,0 +1,48 @@
+
+<aside class="sidebar">
+
+    <nav class="sidebar-nav">
+
+        {% if request.user.role == "PATIENT" %}
+
+            <a href="/patient/dashboard/" class="sidebar-link">
+                Dashboard
+            </a>
+
+            <a href="/patient/upload/" class="sidebar-link">
+                Upload Retinal Image
+            </a>
+
+            <a href="/patient/history/" class="sidebar-link">
+                Prediction History
+            </a>
+
+        {% elif request.user.role == "DOCTOR" %}
+
+            <a href="/doctor/dashboard/" class="sidebar-link">
+                Dashboard
+            </a>
+
+            <a href="/doctor/cases/" class="sidebar-link">
+                Patient Cases
+            </a>
+
+        {% elif request.user.is_staff or request.user.is_superuser %}
+
+            <a href="/admin-dashboard/" class="sidebar-link">
+                Dashboard
+            </a>
+
+            <a href="/admin-dashboard/users/" class="sidebar-link">
+                Users
+            </a>
+
+            <a href="/admin-dashboard/reports/" class="sidebar-link">
+                Reports
+            </a>
+
+        {% endif %}
+
+    </nav>
+
+</aside>

@@ -1,0 +1,107 @@
+{% extends "layouts/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}
+Patient Dashboard | Diabetic Eye Detection
+{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-header">
+    <div>
+        <h1>Welcome back, {{ request.user.first_name|default:request.user.username }}</h1>
+        <p>
+            Manage your retinal screenings, predictions, doctor reviews and medical reports.
+        </p>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+
+    <!-- New Screening -->
+    <div class="dashboard-card">
+        <div class="dashboard-card-icon">
+            +
+        </div>
+
+        <div class="dashboard-card-content">
+            <h3>New Screening</h3>
+            <p>
+                Upload a retinal image and get an AI-powered diabetic eye disease analysis.
+            </p>
+
+            <a href="/patient/upload/" class="dashboard-button">
+                Upload Retinal Image
+            </a>
+        </div>
+    </div>
+
+
+    <!-- Prediction History -->
+    <div class="dashboard-card">
+        <div class="dashboard-card-icon">
+            ↗
+        </div>
+
+        <div class="dashboard-card-content">
+            <h3>Prediction History</h3>
+            <p>
+                Review your previous retinal screenings and AI prediction results.
+            </p>
+
+            <a href="/patient/history/" class="dashboard-button">
+                View History
+            </a>
+        </div>
+    </div>
+
+
+    <!-- Doctor Reviews -->
+    <div class="dashboard-card">
+        <div class="dashboard-card-icon">
+            ✓
+        </div>
+
+        <div class="dashboard-card-content">
+            <h3>Doctor Reviews</h3>
+            <p>
+                Check clinical feedback and notes provided by your reviewing doctor.
+            </p>
+
+            <a href="#" class="dashboard-button">
+                View Reviews
+            </a>
+        </div>
+    </div>
+
+
+    <!-- Medical Reports -->
+    <div class="dashboard-card">
+        <div class="dashboard-card-icon">
+            ↓
+        </div>
+
+        <div class="dashboard-card-content">
+            <h3>Medical Reports</h3>
+            <p>
+                Access medical reports generated after doctor review and download your PDF report.
+            </p>
+
+            <a href="#" class="dashboard-button">
+                View Reports
+            </a>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block page_js %}
+<script>
+    document.body.dataset.requiredRole = "PATIENT";
+</script>
+
+<script src="{% static 'js/page-guard.js' %}"></script>
+{% endblock %}
+

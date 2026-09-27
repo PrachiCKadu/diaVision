@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Doctor Dashboard | Diabetic Eye Detection{% endblock %}
+
+{% block required_role %}DOCTOR{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/doctor.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <div class="dashboard-header">
+        <div>
+            <h1>Doctor Dashboard</h1>
+            <p>
+                Welcome, Dr. {{ request.user.first_name|default:request.user.username }}.
+            </p>
+        </div>
+
+        <span id="doctor-case-count" class="status-badge">
+            Loading...
+        </span>
+    </div>
+
+
+    <!-- Overview -->
+<!-- Clinical Overview -->
+
+<section class="dashboard-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Clinical Overview</h2>
+            <p>
+                Monitor retinal cases, clinical reviews,
+                and AI-assisted assessments.
+            </p>
+        </div>
+
+        <span
+            id="overview-status"
+            class="status-badge"
+        >
+            Loading...
+        </span>
+
+    </div>
+
+
+    <div class="dashboard-grid overview-metrics">
+
+        <!-- Total Cases -->
+
+        <div class="dashboard-card metric-card">
+
+            <div class="metric-card-header">
+                <span class="metric-label">
+                    Total Cases
+                </span>
+
+                <span class="metric-icon">
+                    Cases
+                </span>
+            </div>
+
+            <div
+                id="metric-total-cases"
+                class="metric-value"
+            >
+                —
+            </div>
+
+            <p class="metric-description">
+                Retinal cases submitted by patients.
+            </p>
+
+        </div>
+
+
+        <!-- Pending Reviews -->
+
+        <div class="dashboard-card metric-card">
+
+            <div class="metric-card-header">
+                <span class="metric-label">
+                    Pending Reviews
+                </span>
+
+                <span class="metric-icon">
+                    Review
+                </span>
+            </div>
+
+            <div
+                id="metric-pending-reviews"
+                class="metric-value"
+            >
+                —
+            </div>
+
+            <p class="metric-description">
+                Cases awaiting clinical assessment.
+            </p>
+
+        </div>
+
+
+        <!-- Reviewed Cases -->
+
+        <div class="dashboard-card metric-card">
+
+            <div class="metric-card-header">
+                <span class="metric-label">
+                    Reviewed Cases
+                </span>
+
+                <span class="metric-icon">
+                    Done
+                </span>
+            </div>
+
+            <div
+                id="metric-reviewed-cases"
+                class="metric-value"
+            >
+                —
+            </div>
+
+            <p class="metric-description">
+                Cases with completed doctor review.
+            </p>
+
+        </div>
+
+
+        <!-- Reports -->
+
+        <div class="dashboard-card metric-card">
+
+            <div class="metric-card-header">
+                <span class="metric-label">
+                    Medical Reports
+                </span>
+
+                <span class="metric-icon">
+                    Reports
+                </span>
+            </div>
+
+            <div
+                id="metric-reports"
+                class="metric-value"
+            >
+                —
+            </div>
+
+            <p class="metric-description">
+                AI-assisted clinical reports generated.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+    <!-- Retinal Cases -->
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+
+            <div>
+                <h2>Recent Retinal Cases</h2>
+
+                <p>
+                    Review patient retinal images and
+                    AI-generated results.
+                </p>
+            </div>
+
+            <span id="doctor-case-status"
+                  class="status-badge">
+                Loading...
+            </span>
+
+        </div>
+
+
+        <div class="case-filters">
+
+    <div class="filter-group">
+
+        <label for="case-search">
+            Search
+        </label>
+
+        <input
+            type="search"
+            id="case-search"
+            class="dashboard-input"
+            placeholder="Search by case ID or patient..."
+        >
+
+    </div>
+
+
+    <div class="filter-group">
+
+        <label for="review-status-filter">
+            Review Status
+        </label>
+
+        <select
+            id="review-status-filter"
+            class="dashboard-input"
+        >
+            <option value="all">
+                All Cases
+            </option>
+
+            <option value="pending">
+                Pending Review
+            </option>
+
+            <option value="reviewed">
+                Reviewed
+            </option>
+        </select>
+
+    </div>
+
+</div>
+
+        <div id="doctor-case-message"
+             class="form-message"
+             style="display: none;">
+        </div>
+
+<div id="doctor-cases-container">
+
+    <div class="table-wrapper">
+
+        <table class="data-table">
+
+            <thead>
+    <tr>
+        <th>Case ID</th>
+        <th>Patient</th>
+        <th>Retinal Image</th>
+        <th>AI Diagnosis</th>
+        <th>Confidence</th>
+        <th>Grad-CAM</th>
+        <th>Review Status</th>
+        <th>Report</th>
+        <th>Uploaded</th>
+        <th>Action</th>
+    </tr>
+</thead>
+
+            <tbody id="doctor-cases-table-body">
+
+                <tr>
+                    <td colspan="10" class="loading-state">
+                        Loading retinal cases...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+    </section>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/doctor-dashboard.js' %}"></script>
+
+{% endblock %}

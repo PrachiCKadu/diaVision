@@ -1,0 +1,249 @@
+
+{% extends "layouts/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}
+Upload Retinal Image | Dia Vision
+{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div>
+        <h1>Upload Retinal Image</h1>
+        <p>
+            Upload a retinal image to begin your diabetic eye screening.
+        </p>
+    </div>
+</section>
+
+
+<section class="upload-page">
+
+    <div class="upload-card">
+
+        <div class="upload-icon">
+            ↑
+        </div>
+
+        <h2>Select Retinal Image</h2>
+
+        <p class="upload-description">
+            Upload a clear retinal fundus image for AI-powered analysis.
+        </p>
+
+
+        <label for="retinal-image" class="upload-dropzone">
+
+            <div class="dropzone-icon">
+                +
+            </div>
+
+            <strong>Choose an image</strong>
+
+            <span>
+                JPG, JPEG or PNG
+            </span>
+
+            <input
+                type="file"
+                id="retinal-image"
+                name="image"
+                accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                hidden
+            >
+
+        </label>
+
+
+        <div id="selected-file" class="selected-file"></div>
+
+
+        <div id="upload-error" class="form-error"></div>
+
+
+        <button
+            type="button"
+            id="upload-btn"
+            class="dashboard-button upload-submit"
+        >
+            Start AI Screening
+        </button>
+
+
+        <div id="upload-status" class="upload-status"></div>
+
+    </div>
+
+
+    <div class="upload-info">
+
+        <div class="info-card">
+            <h3>Before uploading</h3>
+
+            <ul>
+                <li>Use a clear retinal fundus image.</li>
+                <li>Make sure the image is not heavily blurred.</li>
+                <li>Supported formats: JPG, JPEG and PNG.</li>
+            </ul>
+        </div>
+
+
+        <div class="info-card">
+            <h3>What happens next?</h3>
+
+            <ol>
+                <li>Your image is securely uploaded.</li>
+                <li>The AI model analyzes the retinal image.</li>
+                <li>A prediction and visual explanation are generated.</li>
+                <li>You can review the result from your dashboard.</li>
+            </ol>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block page_js %}
+
+<script>
+    document.body.dataset.requiredRole = "PATIENT";
+</script>
+
+<script src="{% static 'js/page-guard.js' %}"></script>
+
+<script>
+    const imageInput = document.getElementById("retinal-image");
+    const selectedFile = document.getElementById("selected-file");
+    const uploadButton = document.getElementById("upload-btn");
+    const uploadError = document.getElementById("upload-error");
+    const uploadStatus = document.getElementById("upload-status");
+
+
+    imageInput.addEventListener("change", function () {
+
+        uploadError.textContent = "";
+        uploadStatus.textContent = "";
+
+        if (!this.files.length) {
+            selectedFile.textContent = "";
+            return;
+        }
+
+        const file = this.files[0];
+
+        selectedFile.textContent =
+            "Selected: " + file.name;
+    });
+
+
+    uploadButton.addEventListener("click", async function () {
+
+        uploadError.textContent = "";
+        uploadStatus.textContent = "";
+
+
+        if (!imageInput.files.length) {
+            uploadError.textContent =
+                "Please select a retinal image first.";
+            return;
+        }
+
+
+        const file = imageInput.files[0];
+
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png"
+        ];
+
+
+        if (!allowedTypes.includes(file.type)) {
+            uploadError.textContent =
+                "Please upload a JPG, JPEG or PNG image.";
+            return;
+        }
+
+
+        const formData = new FormData();
+
+        formData.append("image", file);
+
+
+        uploadButton.disabled = true;
+        uploadButton.textContent = "Analyzing...";
+
+
+        try {
+
+            const token = localStorage.getItem("access_token");
+
+
+            if (!token) {
+                throw new Error(
+                    "Your session has expired. Please login again."
+                );
+            }
+
+
+            const response = await fetch(
+                "/api/patients/upload/",
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    },
+                    body: formData
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (!response.ok) {
+
+                let message = "Image upload failed.";
+
+                if (data.detail) {
+                    message = data.detail;
+                } else if (data.image) {
+                    message = data.image.join(" ");
+                }
+
+                throw new Error(message);
+            }
+
+
+            uploadStatus.textContent =
+                "Image uploaded successfully. AI analysis completed.";
+
+
+            selectedFile.textContent =
+                "Uploaded: " + file.name;
+
+
+            imageInput.value = "";
+
+
+        } catch (error) {
+
+            uploadError.textContent =
+                error.message || "Something went wrong.";
+
+        } finally {
+
+            uploadButton.disabled = false;
+            uploadButton.textContent = "Start AI Screening";
+        }
+
+    });
+</script>
+
+
+{% endblock %}
+

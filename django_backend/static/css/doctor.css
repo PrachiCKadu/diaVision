@@ -1,0 +1,544 @@
+/* =========================================================
+   DOCTOR DASHBOARD
+========================================================= */
+
+.retinal-table-image {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+
+/* =========================================================
+   CASE DETAIL PAGE
+========================================================= */
+
+.dashboard-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+}
+
+
+/* Header */
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+    margin: 0 0 6px;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.dashboard-header p {
+    margin: 0;
+    opacity: 0.7;
+}
+
+
+/* Sections */
+
+.dashboard-section {
+    margin-bottom: 32px;
+}
+
+.dashboard-section > h2 {
+    margin-bottom: 18px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.dashboard-section > p {
+    margin-top: -8px;
+    margin-bottom: 18px;
+    opacity: 0.7;
+}
+
+
+/* =========================================================
+   PATIENT INFORMATION
+========================================================= */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.dashboard-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.dashboard-card h3 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    font-weight: 600;
+    opacity: 0.65;
+}
+
+.dashboard-card p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   IMAGE PANELS
+========================================================= */
+
+.case-image-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 380px;
+    padding: 24px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+}
+
+.retinal-detail-image {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 520px;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   AI PREDICTION
+========================================================= */
+
+.dashboard-section .dashboard-grid {
+    margin-bottom: 18px;
+}
+
+#predicted-class {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+#prediction-confidence {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+
+/* Probability list */
+
+#probability-list {
+    margin-top: 18px;
+}
+
+.probability-row {
+    margin-bottom: 18px;
+}
+
+.probability-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 7px;
+}
+
+.probability-header span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.probability-header strong {
+    font-size: 14px;
+}
+
+.probability-bar {
+    width: 100%;
+    height: 9px;
+    overflow: hidden;
+    background: #e5e7eb;
+    border-radius: 999px;
+}
+
+.probability-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: #2563eb;
+    transition: width 0.4s ease;
+}
+
+
+/* =========================================================
+   DOCTOR CLINICAL REVIEW
+========================================================= */
+
+#existing-doctor-review {
+    margin-bottom: 18px;
+}
+
+.review-summary {
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.review-summary h3 {
+    margin-top: 0;
+    margin-bottom: 18px;
+}
+
+.review-summary p {
+    line-height: 1.6;
+}
+
+.review-notes {
+    margin-top: 20px;
+    padding: 18px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+}
+
+.review-notes strong,
+.review-notes h4 {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.review-notes p {
+    margin: 0;
+    line-height: 1.7;
+}
+
+.review-status {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    background: #eef2ff;
+}
+
+
+/* Review form */
+
+#doctor-review-form-container,
+#doctor-review-edit-container {
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-group textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    resize: vertical;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.form-group textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.review-actions {
+    display: flex;
+    gap: 12px;
+}
+
+
+/* =========================================================
+   MEDICAL REPORT
+========================================================= */
+
+#medical-report-container {
+    margin-top: 18px;
+}
+
+#medical-report-container .dashboard-card {
+    padding: 28px;
+}
+
+#medical-report-container h3 {
+    margin: 0 0 24px;
+    font-size: 21px;
+}
+
+#medical-report-container .case-information {
+    margin-bottom: 24px;
+}
+
+.case-information {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.case-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.case-info-row:last-child {
+    border-bottom: none;
+}
+
+.case-info-row strong {
+    font-weight: 600;
+}
+
+.case-info-row span {
+    text-align: right;
+}
+
+#report-not-available {
+    margin-top: 18px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .case-image-panel {
+        min-height: 280px;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .dashboard-page {
+        padding: 20px 14px 40px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header h1 {
+        font-size: 24px;
+    }
+
+    .dashboard-card {
+        padding: 18px;
+    }
+
+    .case-image-panel {
+        min-height: 220px;
+        padding: 14px;
+    }
+
+    .retinal-detail-image {
+        max-height: 350px;
+    }
+
+    .case-info-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .case-info-row span {
+        text-align: left;
+    }
+
+    .review-actions {
+        flex-direction: column;
+    }
+}
+
+/* =================================
+   Doctor Dashboard Metrics
+================================= */
+
+.overview-metrics {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+
+.metric-card {
+    padding: 22px;
+    min-height: 165px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.metric-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+
+.metric-label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.metric-icon {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 9px;
+    border-radius: 6px;
+    background: #f1f3f5;
+}
+
+
+.metric-value {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1;
+    margin: 16px 0 8px;
+}
+
+
+.metric-description {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+@media (max-width: 1000px) {
+
+    .overview-metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .overview-metrics {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* =================================
+   Case Filters
+================================= */
+
+.case-filters {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+
+.filter-group label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.dashboard-input {
+    min-width: 220px;
+    padding: 10px 12px;
+    border: 1px solid #d9dee3;
+    border-radius: 8px;
+    background: #ffffff;
+    font: inherit;
+    outline: none;
+}
+
+
+.dashboard-input:focus {
+    border-color: #6c757d;
+}
+
+
+@media (max-width: 700px) {
+
+    .case-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+
+    .dashboard-input {
+        width: 100%;
+        min-width: 0;
+    }
+
+}

@@ -1,0 +1,356 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>DiaVision</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+
+<body>
+    <div class="top-bar"></div>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="{% static 'img/Dia.png' %}" alt="Dia Vision Logo" class="logo-mark">
+                <!-- <span class="logo-mark"></span> -->
+                <a href="{% url 'home' %}" style="text-decoration: none;">
+                    DiaVision<span class="logo-reg"></span>
+                </a>
+            </div>
+            <div class="nav-link">
+                <button class="btn">
+                    Why DiaVision
+                    <svg viewBox="0 0 12 8" fill="none">
+                        <path d="M1 1L6 6L11 1" stroke="#241a38" stroke-width="1.6" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button class="btn">
+                    Clinical Services
+                    <svg viewBox="0 0 12 8" fill="none">
+                        <path d="M1 1L6 6L11 1" stroke="#241a38" stroke-width="1.6" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button class="btn">
+                    Partnering
+                    <svg viewBox="0 0 12 8" fill="none">
+                        <path d="M1 1L6 6L11 1" stroke="#241a38" stroke-width="1.6" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="btn-right">
+                <button class="nav-plain">About</button>
+                <button class="nav-plain">Contact</button>
+                <a href="{% url 'login-page' %}" class="btn-login">Login | SignIn</a>
+            </div>
+        </nav>
+    </header>
+    <!-- -------------------------- -->
+    <main>
+        <section class="herowrap">
+            <div class="heroinner">
+                <div class="hero-copy">
+                    <h1>Early Detection for<br>Better Vision</h1>
+                    <p>Detect diabetic eye diseases quickly and accurately using our
+                        AI-powered screening platform. Upload retinal fundus images to
+                        receive instant disease classification, severity prediction,
+                        confidence scores, and AI-assisted medical reports.</p>
+                        <a href="{% url 'login-page' %}" style="text-decoration: none;">
+<button class="screening">Start Screening</button>
+                        </a>
+                    
+                    
+                </div>
+                <div class="media">
+                    <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=1200&auto=format&fit=crop"
+                        alt="Optician with patient">
+                    <div class="play-btn" id="" role="button" aria-label="play video">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M5 3L19 12L5 21V3Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <svg class="hero-curve" viewBox="0 0 1440 90" preserveAspectRatio="none">
+                <path d="M0,90 L0,40 C360,90 1080,0 1440,50 L1440,90 Z" fill="#ffffff"></path>
+            </svg>
+        </section>
+        <p class="trusted">
+            Trusted by leading ophthalmology institutions and diabetic eye care professionals
+        </p>
+        <div class="outerlogo">
+            <div class="marque">
+                <div class="tracklogo">
+                    <div class="logo-set">
+                        <!---------- LOGO SET 1 ------------>
+                        <span class="partner">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M2 12C2 12 6 5 12 5C18 5 22 12 22 12C22 12 18 19 12 19C6 19 2 12 2 12Z"
+                                    stroke="#8b879a" stroke-width="1.6" />
+                                <circle cx="12" cy="12" r="3" stroke="#8b879a" stroke-width="1.6" />
+                            </svg>
+                            <span>
+                                LV Prasad
+                                <small>Eye Institute</small>
+                            </span>
+                        </span>
+
+                    <span class="partner">
+                        <strong>EyePACS</strong>
+                    </span>
+
+                    <span class="partner">
+                        <svg width="22" height="22" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" fill="#3a3745" />
+                            <path d="M12 2A10 10 0 0 1 12 22" fill="#8b879a" />
+                        </svg>
+                        Sankara Nethralaya
+                    </span>
+
+                    <span class="partner">
+                        <svg width="22" height="22" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" fill="#d9d5cc" />
+                            <circle cx="14" cy="10" r="4" fill="#241a38" />
+                            <circle cx="15.2" cy="8.8" r="1.1" fill="#fff" />
+                        </svg>
+                        <span>
+                            American Academy
+                            <small>Ophthalmology</small>
+                        </span>
+                    </span>
+
+                    <span class="partner">
+                        <strong>Aravind Eye Care</strong>
+                    </span>
+
+
+                </div>
+                <!---------- LOGO SET 2 - EXACT DUPLICATE ------------>
+                <div class="logo-set">
+
+                    <span class="partner">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M2 12C2 12 6 5 12 5C18 5 22 12 22 12C22 12 18 19 12 19C6 19 2 12 2 12Z"
+                                stroke="#8b879a" stroke-width="1.6" />
+                            <circle cx="12" cy="12" r="3" stroke="#8b879a" stroke-width="1.6" />
+                        </svg>
+                        <span>
+                            LV Prasad
+                            <small>Eye Institute</small>
+                        </span>
+                    </span>
+
+                    <span class="partner">
+                        <strong>EyePACS</strong>
+                    </span>
+
+                    <span class="partner">
+                        <svg width="22" height="22" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" fill="#3a3745" />
+                            <path d="M12 2A10 10 0 0 1 12 22" fill="#8b879a" />
+                        </svg>
+                        Sankara Nethralaya
+                    </span>
+
+                    <span class="partner">
+                        <svg width="22" height="22" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" fill="#d9d5cc" />
+                            <circle cx="14" cy="10" r="4" fill="#241a38" />
+                            <circle cx="15.2" cy="8.8" r="1.1" fill="#fff" />
+                        </svg>
+                        <span>
+                            American Academy
+                            <small>Ophthalmology</small>
+                        </span>
+                    </span>
+                    <span class="partner">
+                        <strong>Aravind Eye Care</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="features">
+        <h2>AI-Powered Diabetic Eye Disease Detection</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Fundus_photograph_of_normal_right_eye.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original"
+                    alt="Retinal Image Analysis">
+                <h3>Retinal Image Analysis</h3>
+                <p>Upload retinal fundus images for automated analysis. Our optimized deep learning model detects
+                    diabetic eye diseases by examining retinal abnormalities with high accuracy.</p>
+            </div>
+            <div class="card">
+                <img src="https://www.acer-medical.com/wp-content/themes/acer-medical/assets/css/solutions/verisee-dr/step-03-en.png"
+                    alt="AI Disease Detection">
+                <h3>AI Disease Detection</h3>
+                <p>Receive disease classification within seconds. The AI model identifies different stages of
+                    diabetic eye diseases, helping healthcare professionals make faster clinical decisions.</p>
+            </div>
+            <div class="card">
+                <img src="https://images.openai.com/static-rsc-4/YyYy8I7SsSlar9kFbwjezeKEXBrEHnzwRocfjr9DvDcojWcqSNu_8t8pSd7F6KZ9WRNg3dwH1Wds49gyZV1h4CYbIjrRHHVTOiu46LnQNvfZvok7Qtn-1Q40ZK5xDkB0WOMxReqbyAv-xN01QqOqObXRRL8kMit2VUbLHcjnP8bt29EgRUSpXiiy-RE_47pB?purpose=fullsize"
+                    alt="Diagnosis Report">
+                <h3>Diagnosis & Reports</h3>
+                <p>Generate detailed screening reports with disease severity predictions and recommendations for
+                    timely treatment, enabling early intervention and improved patient care.</p>
+            </div>
+        </div>
+    </section>
+   <section class="ytvideo">
+    <iframe
+        src="https://www.youtube.com/embed/OvDnbPO-z40?autoplay=1&mute=1&loop=1&playlist=OvDnbPO-z40&controls=0&playsinline=1&origin=http%3A%2F%2F127.0.0.1%3A8000"
+        frameborder="0"
+        title="RetinaLyze Video"
+        allow="autoplay;encrypted-media;fullscreen"
+        allowfullscreen
+        class="video"></iframe>
+</section>
+
+    <section class="working">
+        <h1 class="title">How it works</h1>
+
+        <div class="divide">
+
+            <div class="leftside">
+                <h2>60+ retinal images and clinical data sources</h2>
+                <p>Upload retinal fundus images and OCT scans into our AI-powered screening system and receive
+                    automated diabetic eye disease classification using an optimized deep convolutional model.</p>
+                <button class="explore-image">Explore supported image datasets</button>
+            </div>
+
+            <div class="rightside">
+                <img src="{% static 'img/brands.png' %}" alt="Compatible devices and integrations">
+                <!-- <img src="img/brands.png" alt="Compatible devices and integrations"> -->
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="complaint">
+        <div class="section-container">
+            <div class="circle">
+                <div class="circle-content">
+                    <span class="million">+5M</span>
+                    <span class="circletext">Eye screenings performed</span>
+                </div>
+            </div>
+            <div class="complaint-info">
+                <h2>Compliant and operational in days</h2>
+
+                <p>
+                    Whether you run a single clinic or a large hospital chain,
+                    DiaVision has a proven track record of fast, compliant
+                    installations and focused training. Time matters and your
+                    customers and patients expect a seamless experience.
+                </p>
+
+                <p>
+                    That’s why we’re proud to be the vendor with the highest
+                    number of real-life screenings: more than 5 million and
+                    counting. In fact, a new screening is performed every
+                    35 seconds.
+                </p>
+
+                <button class="btn-contact" id="salesButton">
+                    Contact sales
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ------------------- Footer Part -------------------------------------->
+
+    <footer class="DiaVision-footer">
+        <div class="footcontainer">
+            <div class="description">
+                <h2>DiaVision</h2>
+
+                <p>
+                    DiaVision is an AI-powered diabetic eye screening system designed
+                    to automatically analyze retinal fundus images and classify
+                    diabetic eye diseases using an optimized deep convolutional model
+                </p>
+
+                <p>
+                    The system helps identify retinal abnormalities associated with
+                    diabetic eye diseases and provides fast, consistent predictions
+                    to support early screening and timely clinical assessment.
+                </p>
+
+                <p>
+                    DiaVision is designed to support hospitals, eye clinics,
+                    screening centers, and telemedicine environments by making
+                    diabetic eye screening faster, efficient, and accessible.
+                </p>
+            </div>
+            <div class="footer-column">
+                <h3>Information</h3>
+                <a href="#" title="Home">Home</a>
+                <a href="#" title="About DiaVision">About DiaVision</a>
+                <a href="#" title="How It Works">How It Works</a>
+                <a href="#" title="Research">Research</a>
+                <a href="#" title="Privacy Policy">Privacy Policy</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Services</h3>
+                <a href="#" title="Diabetic Eye Screening">Diabetic Eye Screening</a>
+                <a href="#" title="Disease Classification">Disease Classification</a>
+                <a href="#" title="Fundus Image Analysis">Fundus Image Analysis</a>
+                <a href="#" title="Clinical Support">Clinical Support</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Connect</h3>
+                <a href="#" class="social-link">
+                    <span class="social-icon">f</span>
+                    Facebook
+                </a>
+                <a href="#" class="social-link">
+                    <span class="social-icon">◎</span>
+                    Instagram
+                </a>
+                <a href="#" class="social-link">
+                    <span class="social-icon">▶</span>
+                    Youtube
+                </a>
+                <a href="#" class="social-link">
+                    <span class="social-icon">in</span>
+                    LinkedIn
+                </a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Let's Talk</h3>
+                <div class="contact-item">
+                    <strong>Email</strong>
+                    <a href="#" title="info@diavision.com">info@diavision.com</a>
+                </div>
+                <div class="contact-item">
+                    <strong>Support</strong>
+                    <a href="#" title="support@diavision.com">support@diavision.com</a>
+                </div>
+                <div class="contact-item">
+                    <strong>Phone</strong>
+                    <a href="#" title="+91 85547 54789">+91 85547 54789</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            DiaVision © 2026 | AI-Powered Diabetic Eye Screening | All rights reserved
+        </div>
+    </footer>
+
+</body>
+
+</html>

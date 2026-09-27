@@ -1,0 +1,474 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Case Review | Diabetic Eye Detection{% endblock %}
+
+{% block required_role %}DOCTOR{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <div class="dashboard-header">
+
+        <div>
+            <h1>Retinal Case Review</h1>
+
+            <p id="case-title">
+                Loading case...
+            </p>
+        </div>
+
+        <a
+            href="/doctor/dashboard/"
+            class="dashboard-button"
+        >
+            ← Back to Cases
+        </a>
+
+    </div>
+
+
+    <div
+        id="case-message"
+        class="form-message"
+        style="display: none;"
+    ></div>
+
+
+    <div id="case-loading" class="loading-state">
+        Loading case details...
+    </div>
+
+
+    <div
+        id="case-content"
+        style="display: none;"
+    >
+
+        <!-- Patient Information -->
+
+        <section class="dashboard-section">
+
+            <h2>Patient Information</h2>
+
+            <div class="dashboard-grid">
+
+                <div class="dashboard-card">
+
+                    <h3>Patient</h3>
+
+                    <p id="patient-username">
+                        —
+                    </p>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <h3>Age</h3>
+
+                    <p id="patient-age">
+                        —
+                    </p>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <h3>Gender</h3>
+
+                    <p id="patient-gender">
+                        —
+                    </p>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <h3>Diabetes Duration</h3>
+
+                    <p id="diabetes-duration">
+                        —
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Retinal Image -->
+
+        <section class="dashboard-section">
+
+            <h2>Retinal Image</h2>
+
+            <div class="case-image-panel">
+
+                <img
+                    id="retinal-image"
+                    src=""
+                    alt="Retinal image"
+                    class="retinal-detail-image"
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- AI Prediction -->
+
+        <section class="dashboard-section">
+
+            <h2>AI Prediction</h2>
+
+            <div class="dashboard-grid">
+
+                <div class="dashboard-card">
+
+                    <h3>Predicted Class</h3>
+
+                    <p id="predicted-class">
+                        —
+                    </p>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <h3>Confidence</h3>
+
+                    <p id="prediction-confidence">
+                        —
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <h3>Class Probabilities</h3>
+
+                <div id="probability-list">
+                    Loading...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Grad-CAM -->
+
+        <section class="dashboard-section">
+
+            <h2>Explainable AI — Grad-CAM</h2>
+
+            <p>
+                Highlighted regions represent areas
+                that contributed to the AI prediction.
+            </p>
+
+            <div class="case-image-panel">
+
+                <img
+                    id="gradcam-image"
+                    src=""
+                    alt="Grad-CAM visualization"
+                    class="retinal-detail-image"
+                >
+
+            </div>
+
+        </section>
+
+
+       <!-- Doctor Review -->
+
+<section class="dashboard-section">
+
+    <h2>Doctor Clinical Review</h2>
+
+    <div
+        id="doctor-review-message"
+        class="form-message"
+        style="display: none;"
+    ></div>
+
+    <!-- Existing Review -->
+
+   <div
+    id="existing-doctor-review"
+    style="display: none;"
+>
+</div>
+
+<div
+    id="doctor-review-edit-container"
+    style="display: none;"
+>
+    <form id="doctor-review-edit-form">
+
+        <div class="form-group">
+
+            <label for="edit-review-notes">
+                Clinical Notes
+            </label>
+
+            <textarea
+                id="edit-review-notes"
+                rows="6"
+                placeholder="Update your clinical observations..."
+                required
+            ></textarea>
+
+        </div>
+
+        <div class="review-actions">
+
+            <button
+                type="submit"
+                id="review-update-btn"
+                class="auth-button"
+            >
+                Save Changes
+            </button>
+
+            <button
+                type="button"
+                id="review-cancel-btn"
+                class="dashboard-button"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </form>
+</div>
+
+
+    <!-- Review Form -->
+
+    <div id="doctor-review-form-container">
+
+        <form id="doctor-review-form">
+
+            <div class="form-group">
+
+                <label for="review-notes">
+                    Clinical Notes
+                </label>
+
+                <textarea
+                    id="review-notes"
+                    name="notes"
+                    rows="6"
+                    placeholder="Enter your clinical observations..."
+                    required
+                ></textarea>
+
+            </div>
+
+            <button
+                type="submit"
+                id="review-submit-btn"
+                class="auth-button"
+            >
+                Save Clinical Review
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+<!-- Medical Report -->
+
+<section class="dashboard-section">
+
+    <div class="section-header">
+
+        <div>
+    <h2>Medical Report</h2>
+
+    <p>
+        AI prediction and doctor's clinical assessment
+        combined into a medical report.
+    </p>
+</div>
+
+<div class="report-actions">
+
+    <button
+        type="button"
+        id="download-report-btn"
+        class="auth-button"
+        style="display: none;"
+    >
+        Download Medical Report (PDF)
+    </button>
+
+</div>
+
+        <span
+            id="report-status"
+            class="status-badge"
+        >
+            Loading...
+        </span>
+
+    </div>
+
+
+    <div
+        id="report-message"
+        class="form-message"
+        style="display: none;"
+    ></div>
+
+
+    <div
+        id="medical-report-container"
+        style="display: none;"
+    >
+
+        <div class="dashboard-card">
+
+            <h3 id="report-title">
+                Diabetic Retinopathy Assessment Report
+            </h3>
+
+
+            <div class="case-information">
+
+                <div class="case-info-row">
+
+                    <strong>
+                        AI Prediction
+                    </strong>
+
+                    <span id="report-ai-prediction">
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="case-info-row">
+
+                    <strong>
+                        AI Confidence
+                    </strong>
+
+                    <span id="report-ai-confidence">
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="case-info-row">
+
+                    <strong>
+                        Generated At
+                    </strong>
+
+                    <span id="report-generated-at">
+                        —
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="review-notes">
+
+                <h4>
+                    Clinical Summary
+                </h4>
+
+                <p id="report-clinical-summary">
+                    —
+                </p>
+
+            </div>
+
+
+            <div class="review-notes">
+
+                <h4>
+                    Doctor's Notes
+                </h4>
+
+                <p id="report-doctor-notes">
+                    —
+                </p>
+
+            </div>
+
+
+            <div class="review-notes">
+
+                <h4>
+                    Recommendation
+                </h4>
+
+                <p id="report-recommendation">
+                    —
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="report-not-available"
+        class="empty-state"
+        style="display: none;"
+    >
+
+        <h3>
+            Medical Report Not Available
+        </h3>
+
+        <p>
+            Complete the doctor's clinical review
+            to generate the medical report.
+        </p>
+
+    </div>
+
+</section>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+    window.DOCTOR_CASE_ID =
+        "{{ retinal_image_id }}";
+</script>
+
+<script src="{% static 'js/doctor-case-detail.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+
+{% load static %}
+
+<header class="navbar">
+
+    <div class="navbar-brand">
+        <a href="/">
+            Diabetic Eye Detection
+        </a>
+    </div>
+
+    <div class="navbar-user">
+
+        <span id="navbar-username">
+            {{ request.user.get_full_name|default:request.user.username }}
+        </span>
+
+        <span id="navbar-role">
+            {{ request.user.get_role_display|default:"User" }}
+        </span>
+
+        <button id="logout-btn" type="button">
+            Logout
+        </button>
+
+    </div>
+
+</header>

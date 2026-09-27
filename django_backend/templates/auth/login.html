@@ -1,0 +1,274 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Login | Dia Vision</title>
+
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+
+</head>
+
+<body>
+
+
+<div class="page">
+
+    <div class="container">
+
+        <div class="logo-section">
+<a href="{% url 'home' %}">
+            <img src="{% static 'img/Dia.png' %}"
+                 alt="Dia Vision Logo">
+</a>
+            <h1>Dia Vision</h1>
+
+            <p>Advanced AI Screening for Diabetic Retinopathy</p>
+
+        </div>
+
+
+        <div class="roletab">
+
+            <button class="role active"
+                    type="button"
+                    data-role="patient">
+                Patient
+            </button>
+
+            <button class="role"
+                    type="button"
+                    data-role="doctor">
+                Doctor
+            </button>
+
+        </div>
+
+
+        <form id="login-form">
+
+            <div class="input-container">
+
+                <i class="fa-regular fa-user"></i>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    required
+                    autocomplete="username"
+                    placeholder="Patient ID or Email"
+                >
+
+            </div>
+
+
+            <div class="input-container">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    autocomplete="current-password"
+                    placeholder="Patient Password"
+                >
+
+                <i class="fa-regular fa-eye password-toggle"
+                   id="eye"></i>
+
+            </div>
+
+
+            <div class="option">
+
+                <label>
+
+                    <input
+                        type="checkbox"
+                        name="Reminder me"
+                        id="remember"
+                    >
+
+                    <span>
+                        Reminder me
+                    </span>
+
+                </label>
+
+                <a href="#">
+                    Forget Password
+                </a>
+
+            </div>
+
+
+            <div id="login-error"
+                 class="form-error">
+            </div>
+
+
+            <button
+                type="submit"
+                id="login-btn"
+                class="login-btn">
+                Login
+            </button>
+
+        </form>
+
+
+        <div class="register">
+
+            <span>
+                New Patient?
+            </span>
+
+            <a href="/register/">
+                Create an account
+            </a>
+
+        </div>
+
+    </div>
+
+<!-- 
+    <footer>
+
+        <div class="footer-link">
+
+            <a href="#">
+                About Dia Vision
+            </a>
+
+            <a href="#">
+                Consultant Credentialing
+            </a>
+
+            <a href="#">
+                Terms Of Services
+            </a>
+
+            <a href="#">
+                Security Policy
+            </a>
+
+            <a href="#">
+                Privacy Policy
+            </a>
+
+        </div>
+
+
+        <div class="copyrights">
+            Dia Vision
+        </div>
+
+    </footer> -->
+
+</div>
+
+
+<script src="{% static 'js/auth.js' %}"></script>
+
+
+<script>
+
+    let selectedRole = "patient";
+
+    const roles =
+        document.querySelectorAll(".role");
+
+    const usernameInput =
+        document.getElementById("username");
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const eye =
+        document.getElementById("eye");
+
+
+    roles.forEach(function (role) {
+
+        role.addEventListener("click", function () {
+
+            roles.forEach(function (item) {
+                item.classList.remove("active");
+            });
+
+            this.classList.add("active");
+
+            selectedRole =
+                this.dataset.role;
+
+
+            if (selectedRole === "patient") {
+
+                usernameInput.placeholder =
+                    "Patient ID or Email";
+
+                passwordInput.placeholder =
+                    "Patient Password";
+
+            }
+
+            else if (selectedRole === "doctor") {
+
+                usernameInput.placeholder =
+                    "Doctor ID or Email";
+
+                passwordInput.placeholder =
+                    "Doctor Password";
+
+            }
+
+        });
+
+    });
+
+
+    eye.addEventListener("click", function () {
+
+        if (passwordInput.type === "password") {
+
+            passwordInput.type = "text";
+
+            eye.classList.remove("fa-eye");
+
+            eye.classList.add("fa-eye-slash");
+
+        }
+
+        else {
+
+            passwordInput.type = "password";
+
+            eye.classList.remove("fa-eye-slash");
+
+            eye.classList.add("fa-eye");
+
+        }
+
+    });
+
+</script>
+
+
+</body>
+
+</html>

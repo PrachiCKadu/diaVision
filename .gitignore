@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+*.sqlite3
+dataset/
+notebooks/
+results/
+models/baseline/
+models/optimized/optimized_diabetic_retinopathy.keras
+models/optimized/retinal_experiment_cnn.keras
+django_backend/media/
+django_backend/staticfiles/
+.git/

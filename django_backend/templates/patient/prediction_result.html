@@ -1,0 +1,259 @@
+{% extends "layouts/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}
+Prediction Result | Dia Vision
+{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div>
+        <h1>Prediction Result</h1>
+        <p>
+            Review the AI-assisted analysis of your retinal image.
+        </p>
+    </div>
+</section>
+
+
+<section class="prediction-result-page">
+
+    <!-- Retinal Image -->
+    <div class="result-card image-card">
+
+        <div class="result-card-header">
+            <div>
+                <h2>Retinal Image</h2>
+                <p>Uploaded retinal fundus image</p>
+            </div>
+        </div>
+
+        <div class="retinal-image-container">
+
+            <img id="retinal-image" src="{{ retinal_image_url }}" alt="Uploaded retinal retinal fundus image">
+
+        </div>
+
+    </div>
+
+
+    <!-- Prediction -->
+    <div class="result-card prediction-card">
+
+        <div class="result-card-header">
+            <div>
+                <h2>AI Prediction</h2>
+                <p>Optimized deep learning model analysis</p>
+            </div>
+        </div>
+
+
+        <div class="prediction-main">
+
+            <span class="prediction-label">
+                Predicted Condition
+            </span>
+
+            <h3 id="predicted-class">
+                Loading...
+            </h3>
+
+        </div>
+
+
+        <div class="prediction-details">
+
+            <div class="prediction-detail">
+                <span>Confidence</span>
+                <strong id="prediction-confidence">
+                    --
+                </strong>
+            </div>
+
+            <div class="prediction-detail">
+                <span>Analysis Status</span>
+                <strong id="prediction-status">
+                    Completed
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI Explanation -->
+    <div class="result-card explanation-card">
+
+        <div class="result-card-header">
+            <div>
+                <h2>AI Visual Explanation</h2>
+                <p>
+                    Grad-CAM visualization highlighting regions
+                    considered important by the model.
+                </p>
+            </div>
+        </div>
+
+
+        <div class="gradcam-container">
+
+            <img id="gradcam-image" src="" alt="Grad-CAM visualization">
+
+            <div id="gradcam-placeholder">
+                Loading visual explanation...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Clinical Note -->
+    <div class="result-card information-card">
+
+        <h2>Important Information</h2>
+
+        <p>
+            This result is generated using an AI-assisted retinal
+            image classification system and is intended for
+            screening and research purposes.
+        </p>
+
+        <p>
+            AI predictions should not be considered a standalone
+            medical diagnosis. Clinical interpretation by a
+            qualified healthcare professional is recommended.
+        </p>
+
+    </div>
+
+
+    <div id="result-error" class="form-error"></div>
+
+</section>
+
+{% endblock %}
+
+{% block page_js %}
+
+<script>
+    document.body.dataset.requiredRole = "PATIENT";
+</script>
+
+<script src="{% static 'js/page-guard.js' %}"></script>
+
+<script>
+    const retinalImageId = "{{ retinal_image_id }}";
+
+    const retinalImage = document.getElementById("retinal-image");
+    const predictedClass = document.getElementById("predicted-class");
+    const predictionConfidence = document.getElementById("prediction-confidence");
+    const predictionStatus = document.getElementById("prediction-status");
+    const gradcamImage = document.getElementById("gradcam-image");
+    const gradcamPlaceholder = document.getElementById("gradcam-placeholder");
+    const resultError = document.getElementById("result-error");
+
+
+    async function loadPredictionResult() {
+
+        try {
+
+            const token = localStorage.getItem("access_token");
+
+            if (!token) {
+                throw new Error(
+                    "Your session has expired. Please login again."
+                );
+            }
+
+
+            const response = await fetch(
+                `/api/predictions/patient/${retinalImageId}/`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (!response.ok) {
+                throw new Error(
+                    data.detail || "Unable to load prediction result."
+                );
+            }
+
+
+            /* Prediction */
+
+            predictedClass.textContent =
+                data.predicted_class || "Unavailable";
+
+
+            if (typeof data.confidence === "number") {
+                predictionConfidence.textContent =
+                    (data.confidence * 100).toFixed(2) + "%";
+            } else {
+                predictionConfidence.textContent = "--";
+            }
+
+
+            predictionStatus.textContent = "Completed";
+
+
+        /* Retinal Image */
+
+        if (data.retinal_image_url) {
+
+            retinalImage.src = data.retinal_image_url;
+            retinalImage.style.display = "block";
+
+        } else {
+
+            retinalImage.style.display = "none";
+
+        }
+
+
+
+            /* Grad-CAM */
+        if (data.gradcam_image) {
+
+            gradcamImage.src = data.gradcam_image;
+            gradcamImage.style.display = "block";
+
+            gradcamPlaceholder.style.display = "none";
+
+        } else {
+
+            gradcamImage.style.display = "none";
+
+            gradcamPlaceholder.textContent =
+                "Visual explanation is not available for this case.";
+
+        }
+
+        } catch (error) {
+
+            predictedClass.textContent = "Unavailable";
+            predictionConfidence.textContent = "--";
+            predictionStatus.textContent = "Unable to load";
+
+            resultError.textContent =
+                error.message || "Unable to load prediction result.";
+
+        }
+
+    }
+
+
+    loadPredictionResult();
+</script>
+
+{% endblock %}

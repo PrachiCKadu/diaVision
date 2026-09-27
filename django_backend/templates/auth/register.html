@@ -1,0 +1,545 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Register | Dia Vision</title>
+
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+</head>
+
+<body>
+
+<div class="page">
+
+<div class="container">
+
+    <div class="logo-section">
+        <a href="{% url 'home' %}">
+        <img src="{% static 'img/Dia.png' %}" alt="Dia Vision Logo">
+</a>
+        <h1>Dia Vision</h1>
+
+        <p>Advanced AI Screening for Diabetic Retinopathy</p>
+    </div>
+
+
+    <div class="roletab">
+
+        <div class="role-slider" id="roleSlider"></div>
+
+        <button
+            class="role active"
+            type="button"
+            id="patientRole">
+
+            <i class="fa-solid fa-user"></i>
+            Patient
+
+        </button>
+
+        <button
+            class="role"
+            type="button"
+            id="doctorRole">
+
+            <i class="fa-solid fa-user-doctor"></i>
+            Doctor
+
+        </button>
+
+    </div>
+
+
+    <div class="register-title">
+
+        <h2 id="formTitle">
+            Create Patient Account
+        </h2>
+
+        <p id="formSubtitle">
+            Register to access your diabetic eye screening
+        </p>
+
+    </div>
+
+
+    <form
+        id="register-form"
+        novalidate>
+
+
+        <!-- PATIENT FORM -->
+
+        <div
+            class="form-section"
+            id="patientForm">
+
+            <div class="input-row">
+
+                <div class="input-container">
+
+                    <i class="fa-regular fa-user"></i>
+
+                    <input
+                        type="text"
+                        id="patientFullName"
+                        placeholder="Full Name"
+                        autocomplete="name">
+
+                </div>
+
+
+                <div class="input-container">
+
+                    <i class="fa-regular fa-envelope"></i>
+
+                    <input
+                        type="email"
+                        id="patientEmail"
+                        placeholder="Email Address"
+                        autocomplete="email">
+
+                </div>
+
+            </div>
+
+
+            <div class="input-row">
+
+                <div class="input-container">
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                    <input
+                        type="date"
+                        id="patientDob">
+
+                </div>
+
+
+                <div class="input-container">
+
+                    <i class="fa-solid fa-venus-mars"></i>
+
+                    <select id="patientGender">
+
+                        <option
+                            value=""
+                            selected
+                            disabled>
+                            Select Gender
+                        </option>
+
+                        <option value="male">
+                            Male
+                        </option>
+
+                        <option value="female">
+                            Female
+                        </option>
+
+                        <option value="other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="input-row">
+
+                <div class="input-container">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="patientPassword"
+                        placeholder="Password"
+                        autocomplete="new-password">
+
+                    <i
+                        class="fa-regular fa-eye password-toggle"
+                        data-target="patientPassword">
+                    </i>
+
+                </div>
+
+
+                <div class="input-container">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="patientConfirmPassword"
+                        placeholder="Confirm Password"
+                        autocomplete="new-password">
+
+                    <i
+                        class="fa-regular fa-eye password-toggle"
+                        data-target="patientConfirmPassword">
+                    </i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DOCTOR FORM -->
+
+        <div
+            class="form-section"
+            id="doctorForm"
+            style="display: none;">
+
+            <div class="input-row">
+
+                <div class="input-container">
+
+                    <i class="fa-regular fa-user"></i>
+
+                    <input
+                        type="text"
+                        id="doctorFullName"
+                        placeholder="Full Name"
+                        autocomplete="name">
+
+                </div>
+
+
+                <div class="input-container">
+
+                    <i class="fa-regular fa-envelope"></i>
+
+                    <input
+                        type="email"
+                        id="doctorEmail"
+                        placeholder="Email Address"
+                        autocomplete="email">
+
+                </div>
+
+            </div>
+
+
+            <div class="input-row">
+
+                <div class="input-container">
+
+                    <i class="fa-solid fa-id-card"></i>
+
+                    <input
+                        type="text"
+                        id="registrationNumber"
+                        placeholder="Medical Registration No."
+                        autocomplete="off">
+
+                </div>
+
+
+                <div class="input-container">
+
+                    <i class="fa-solid fa-building-columns"></i>
+
+                    <select id="medicalCouncil">
+
+                        <option
+                            value=""
+                            selected
+                            disabled>
+                            Select Medical Council
+                        </option>
+
+                        <option value="NMC">
+                            National Medical Commission (NMC)
+                        </option>
+
+                        <option value="Maharashtra Medical Council">
+                            Maharashtra Medical Council
+                        </option>
+
+                        <option value="Delhi Medical Council">
+                            Delhi Medical Council
+                        </option>
+
+                        <option value="Karnataka Medical Council">
+                            Karnataka Medical Council
+                        </option>
+
+                        <option value="Gujarat Medical Council">
+                            Gujarat Medical Council
+                        </option>
+
+                        <option value="Tamil Nadu Medical Council">
+                            Tamil Nadu Medical Council
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="input-row">
+
+                <div class="input-container">
+
+                    <i class="fa-solid fa-graduation-cap"></i>
+
+                    <select id="qualification">
+
+                        <option
+                            value=""
+                            selected
+                            disabled>
+                            Select Qualification
+                        </option>
+
+                        <option value="MBBS">
+                            MBBS
+                        </option>
+
+                        <option value="MD">
+                            MD
+                        </option>
+
+                        <option value="MS">
+                            MS
+                        </option>
+
+                        <option value="DNB">
+                            DNB
+                        </option>
+
+                        <option value="DM">
+                            DM
+                        </option>
+
+                        <option value="MCh">
+                            MCh
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="input-container">
+
+                    <i class="fa-solid fa-stethoscope"></i>
+
+                    <select id="specialization">
+
+                        <option
+                            value=""
+                            selected
+                            disabled>
+                            Select Specialization
+                        </option>
+
+                        <option value="Ophthalmologist">
+                            Ophthalmologist
+                        </option>
+
+                        <option value="Retina Specialist">
+                            Retina Specialist
+                        </option>
+
+                        <option value="Diabetologist">
+                            Diabetologist
+                        </option>
+
+                        <option value="Endocrinologist">
+                            Endocrinologist
+                        </option>
+
+                        <option value="General Physician">
+                            General Physician
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="input-row">
+
+                <div class="input-container">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="doctorPassword"
+                        placeholder="Password"
+                        autocomplete="new-password">
+
+                    <i
+                        class="fa-regular fa-eye password-toggle"
+                        data-target="doctorPassword">
+                    </i>
+
+                </div>
+
+
+                <div class="input-container">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="doctorConfirmPassword"
+                        placeholder="Confirm Password"
+                        autocomplete="new-password">
+
+                    <i
+                        class="fa-regular fa-eye password-toggle"
+                        data-target="doctorConfirmPassword">
+                    </i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TERMS -->
+
+        <div class="terms">
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    id="terms">
+
+                <span>
+
+                    I agree to the
+
+                    <a href="#">
+                        Terms of Service
+                    </a>
+
+                    and
+
+                    <a href="#">
+                        Privacy Policy
+                    </a>
+
+                </span>
+
+            </label>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+            id="register-error"
+            class="form-error">
+        </div>
+
+
+        <!-- REGISTER BUTTON -->
+
+        <button
+            type="submit"
+            id="register-btn"
+            class="register-btn">
+
+            Create Account
+
+        </button>
+
+    </form>
+
+
+    <div class="login-link">
+
+        <span>
+            Already have an account?
+        </span>
+
+        <a href="{% url 'login-page' %}">
+            Login
+        </a>
+
+    </div>
+
+</div>
+<!-- 
+
+<footer>
+
+    <div class="footer-link">
+
+        <a href="#">
+            About Dia Vision
+        </a>
+
+        <a href="#">
+            Consultant Credentialing
+        </a>
+
+        <a href="#">
+            Terms Of Services
+        </a>
+
+        <a href="#">
+            Security Policy
+        </a>
+
+        <a href="#">
+            Privacy Policy
+        </a>
+
+    </div>
+
+    <div class="copyrights">
+        Dia Vision
+    </div>
+
+</footer> -->
+
+
+</div>
+
+<script src="{% static 'js/register.js' %}"></script>
+
+</body>
+</html>
